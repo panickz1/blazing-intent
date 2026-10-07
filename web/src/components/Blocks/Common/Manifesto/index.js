@@ -12,9 +12,9 @@ export default function Manifesto({ eyebrow, title, titleAccent, facts }) {
       {eyebrow && (
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">{eyebrow}</p>
       )}
-      <h1 className="mt-5 max-w-[14ch] font-heading text-[clamp(44px,7.6vw,108px)] font-black leading-[0.94] tracking-[-0.045em] text-white [text-wrap:balance]">
+      <h2 className="m-0 mt-5 max-w-[14ch] font-heading text-[clamp(44px,7.6vw,108px)] font-black leading-[0.94] tracking-[-0.045em] text-white [text-wrap:balance]">
         {lead} {accent && <span className="text-primary">{accent}</span>}
-      </h1>
+      </h2>
 
       {items.length > 0 && (
         <ol className="mt-12 grid border-y border-grey-800 sm:grid-cols-3 lg:mt-16">
