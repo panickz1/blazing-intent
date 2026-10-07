@@ -66,6 +66,8 @@ export const site = {
     howToClaim: "How to claim",
     info: "General information",
     code: "Code",
+    copyLabel: "Tap to copy",
+    copiedLabel: "Copied",
     freeSpins: "Free spins",
     maxWin: "Max win",
     minOdds: "Min. odds",

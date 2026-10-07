@@ -61,27 +61,15 @@ export function PaymentLogos({ payments, max = 3, className }) {
   if (payments.length === 0) return null;
   const shown = payments.slice(0, max);
   const extra = payments.length - shown.length;
-  const all = payments.map((p) => p.name).join(", ");
-  if (!shown.some((p) => p.logo?.src)) {
-    return (
-      <p className={cn("m-0 truncate text-[13px] text-grey-100", className)} title={all}>
-        {shown.map((p) => p.name).join(", ")}
-        {extra > 0 && <span className="text-fg-muted"> +{extra}</span>}
-      </p>
-    );
-  }
   return (
-    <ul className={cn("m-0 flex list-none flex-wrap items-center gap-1.5 p-0", className)} title={all}>
+    <ul className={cn("m-0 flex list-none flex-wrap items-center gap-1 p-0", className)} title={payments.map((p) => p.name).join(", ")}>
       {shown.map((p) => (
-        <li key={p.id} className="flex h-7 items-center rounded border border-grey-700 bg-grey-950 px-1.5">
-          {p.logo?.src ? (
-            <Image src={p.logo.src} alt={p.name} width={p.logo.width || 48} height={p.logo.height || 24} className="h-4 w-auto max-w-12 object-contain" />
-          ) : (
-            <span className="text-[11.5px] font-semibold text-grey-100">{p.name}</span>
-          )}
+        <li key={p.id} className="flex h-6 items-center gap-1 rounded border border-grey-700 bg-grey-950 px-1.5 text-[11.5px] font-semibold text-grey-100">
+          {p.logo?.src && <Image src={p.logo.src} alt="" width={p.logo.width || 32} height={p.logo.height || 16} className="h-3.5 w-auto max-w-8 object-contain" />}
+          {p.name}
         </li>
       ))}
-      {extra > 0 && <li className="text-[12px] text-fg-muted">+{extra}</li>}
+      {extra > 0 && <li className="px-0.5 text-[12px] text-fg-muted">+{extra}</li>}
     </ul>
   );
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Markdown } from "@/components/Markdown";
 import { site } from "@/site.config";
+import CopyCode from "./CopyCode";
 
 const SPONSORED = "nofollow sponsored noopener";
 
@@ -10,7 +11,6 @@ function facts(bonus) {
   return [
     [l.columns.wagering, bonus.wagering],
     [l.columns.deposit, bonus.minDeposit],
-    [l.code, bonus.code],
     [l.freeSpins, bonus.freeSpins],
     [l.maxWin, bonus.maxWin],
     [l.minOdds, bonus.minOdds],
@@ -43,6 +43,7 @@ export default function BonusDetails({ bonus, casino, showActions = true }) {
             <Markdown>{bonus.info}</Markdown>
           </div>
         )}
+        {bonus.code && <CopyCode code={bonus.code} />}
         {list.length > 0 && (
           <dl className="m-0 grid grid-cols-2 gap-2">
             {list.map(([label, value]) => (

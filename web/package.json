@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node -e \"require('fs').rmSync((process.env.NEXT_DIST_DIR || '.next') + '/cache/fetch-cache', { recursive: true, force: true })\" && next build",
     "start": "next start",
     "lint": "eslint .",
     "knip": "knip"

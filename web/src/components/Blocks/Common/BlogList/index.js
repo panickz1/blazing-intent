@@ -49,10 +49,12 @@ export default async function BlogList(props) {
         <BlogListClient
           cards={shownCards}
           chips={shownChips}
+          layout={props.layout === "magazine" || props.layout === "compact" ? props.layout : Heading === "h1" ? "magazine" : "compact"}
           initialCount={num(props.initialCount, 9)}
           step={num(props.step, 9)}
           showFilters={props.showFilters !== false}
           loadMoreLabel={pick(props.loadMoreLabel, "Load more")}
+          readLabel={pick(props.readLabel, "Read article")}
         />
       </div>
 
