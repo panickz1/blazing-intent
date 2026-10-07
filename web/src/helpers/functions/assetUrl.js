@@ -6,6 +6,9 @@ export default function assetUrl(file) {
   if (!name) return null;
   if (/^(https?:)?\/\//i.test(name) || name.startsWith("/")) return name;
   if (CDN_URL) return CDN_URL.replace(/\/?$/, "/") + name;
-  if (CMS_URL) return `${CMS_URL.replace(/\/$/, "")}/assets/${name.replace(/\.[^.]+$/, "")}`;
+  if (CMS_URL) {
+    const id = name.replace(/\.[^.]+$/, "");
+    return `${CMS_URL.replace(/\/$/, "")}/assets/${id}${/\.svg$/i.test(name) ? `/${name}` : ""}`;
+  }
   return null;
 }
