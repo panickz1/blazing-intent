@@ -1,7 +1,7 @@
 import ContentRenderer from "@/helpers/content/ContentRenderer";
 import ArticleProgressBar from "@/components/ui/readProgress";
 import ArticleHeader from "./ArticleHeader";
-import ArticleHero from "./ArticleHero";
+import readingTime from "@/helpers/content/readingTime";
 import ArticleSidebar from "./ArticleSidebar";
 import MobileTableOfContents from "./MobileTableOfContents";
 
@@ -16,6 +16,7 @@ export default function ArticleLayout({
   showAuthor = true,
   dateLabel = null,
   backFallback = "/blog",
+  ctaCasino = null,
 }) {
   const heroSrc = data?.image?.filename_disk;
   const hasSidebar = showCta || headings.length > 0;
@@ -31,12 +32,13 @@ export default function ArticleLayout({
           showAuthor={showAuthor}
           dateLabel={dateLabel}
           backFallback={backFallback}
+          image={heroSrc}
+          minutes={showAuthor ? readingTime(content) : null}
         />
 
         <div className={`grid grid-cols-1 gap-8 ${hasSidebar ? "lg:grid-cols-[260px_minmax(0,1fr)]" : ""}`}>
-          {hasSidebar && <ArticleSidebar headings={headings} showCta={showCta} />}
+          {hasSidebar && <ArticleSidebar headings={headings} showCta={showCta} ctaCasino={ctaCasino} />}
           <div className="min-w-0 flex flex-col gap-6">
-            {heroSrc && <ArticleHero src={heroSrc} alt={data?.title || data?.shortTitle} />}
             <div className="article-prose">
               <ContentRenderer content={content} nodes={nodes} generalData={generalData} />
             </div>

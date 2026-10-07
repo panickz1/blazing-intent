@@ -4,6 +4,7 @@ import ArticleLayout from "@/components/Article/ArticleLayout";
 import Schema from "@/helpers/SEO/Schema";
 import PageShell from "@/components/Layout/PageShell";
 import { getBlogParams, getBlogCategory } from "@/lib/blog";
+import { getCtaCasino } from "@/lib/casinos";
 import { site } from "@/site.config";
 
 const APICollectionKeys = { type: "articles", node: "articles_node" };
@@ -22,6 +23,7 @@ const ARTICLE_FIELDS = [
   "author.linkedin",
   "author.avatar.filename_disk",
   "showCta",
+  "ctaCasino",
   "categories.categories_id.name",
   "categories.categories_id.slug",
 ];
@@ -42,6 +44,8 @@ export default async function Article(props) {
   const headings = extractHeadings(item?.content);
   const found = await getBlogCategory(category);
   const url = `${site.url}/blog/${category}/${slug}`;
+  const showCta = item?.showCta !== false;
+  const ctaCasino = showCta ? await getCtaCasino([item?.ctaCasino, generalData?.featuredCasino]) : null;
 
   return (
     <PageShell>
@@ -53,7 +57,8 @@ export default async function Article(props) {
         generalData={generalData}
         headings={headings}
         category={found?.category ? { name: found.category.name, slug: found.category.slug } : null}
-        showCta={item?.showCta !== false}
+        showCta={showCta}
+        ctaCasino={ctaCasino}
         showAuthor
         backFallback={category ? `/blog/${category}` : "/blog"}
       />

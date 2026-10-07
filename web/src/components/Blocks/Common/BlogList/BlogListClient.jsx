@@ -63,14 +63,14 @@ function CompactCard({ card, priority }) {
   return (
     <Link
       href={card.href}
-      className="group flex h-full gap-4 rounded-xl border border-grey-800 bg-grey-900 p-3 transition-colors hover:border-grey-600"
+      className="group flex h-full items-center gap-4 rounded-xl border border-grey-800 bg-grey-900 p-3 transition-colors hover:border-grey-600"
     >
       <Media
         card={card}
         priority={priority}
         sizes="128px"
         iconClassName="size-5"
-        className="aspect-[4/3] w-24 shrink-0 self-start rounded-lg sm:w-28"
+        className="aspect-square w-24 shrink-0 rounded-lg"
       />
       <div className="flex min-w-0 flex-1 flex-col py-0.5">
         <Meta card={card} className="text-[12px]" />
@@ -115,15 +115,15 @@ function GridCard({ card }) {
   return (
     <Link
       href={card.href}
-      className="group flex h-full gap-4 overflow-hidden rounded-xl border border-grey-800 bg-grey-900 p-3 transition-colors hover:border-grey-600 sm:flex-col sm:gap-0 sm:p-0"
+      className="group flex h-full items-center gap-4 overflow-hidden rounded-xl border border-grey-800 bg-grey-900 p-3 transition-colors hover:border-grey-600 sm:flex-col sm:items-stretch sm:gap-0 sm:p-0"
     >
       <Media
         card={card}
         sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 128px"
         iconClassName="size-5 sm:size-6"
-        className="aspect-[4/3] w-24 shrink-0 self-start rounded-lg sm:aspect-[2/1] sm:w-full sm:rounded-none"
+        className="aspect-square w-24 shrink-0 rounded-lg sm:aspect-[2/1] sm:w-full sm:rounded-none"
       />
-      <div className="flex min-w-0 flex-1 flex-col py-0.5 sm:p-5">
+      <div className="flex min-w-0 flex-1 flex-col py-0.5 sm:self-stretch sm:p-5">
         <Meta card={card} className="text-[12px] sm:text-[12.5px]" />
         <h3 className="m-0 mt-1.5 line-clamp-2 font-heading text-[16px] sm:mt-2 sm:text-[17px] font-bold leading-snug text-white transition-colors group-hover:text-primary [text-wrap:balance]">
           {card.title}

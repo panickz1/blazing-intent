@@ -35,6 +35,7 @@ export const site = {
     visitLabel: "Visit",
     reviewLabel: "Review",
     claimLabel: "Claim bonus",
+    pickLabel: "Our pick",
     paymentMethodsLabel: "Payment methods",
     bonusLabel: "Welcome bonus",
     listHeading: "Best online casinos ranked",

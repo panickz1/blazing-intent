@@ -43,10 +43,10 @@ It also repairs any collection display template that points at a missing field. 
 | `marketStats` | One row per casino per month (e.g. searches). Feeds the `marketRanking` block, which shows the latest month and the change from the previous one. |
 | `authors` | Writers and reviewers (photo, role, bio, experience, expertise, favourite, tip, links). Shown by the `landingTeam` block; each has a slug for future author pages. |
 | `pages` + `pages_editor_node` | Marketing pages. `content` is flexible-editor JSON; blocks are an M2A on `page_nodes`. |
-| `articles`, `categories` | Blog at `/blog/<category>/<slug>` |
+| `articles`, `categories` | Blog at `/blog/<category>/<slug>`. `ctaCasino` sets the sidebar casino for one article (falls back to the theme's `featuredCasino`, then the #1 ranked casino) |
 | `help_articles`, `help_categories` | Help centre at `/help-center/<slug>` |
 | `menus` | `main-menu` for the nav; `footer-menu-<n>` columns in the footer. A footer menu titled "Social" renders as icons, one titled "Legal" moves to the bottom bar. |
-| `theme` (singleton) | Logo |
+| `theme` (singleton) | Logo; `featuredCasino`, the default casino in the article sidebar |
 | `footer` (singleton) | Footer disclaimer |
 | `redirects` | 301s, read when the site builds |
 | `leads` | Contact form submissions |

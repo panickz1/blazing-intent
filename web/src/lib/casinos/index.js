@@ -172,6 +172,13 @@ export async function getCasinoCards({ ids = [], limit, exclude, sortBy } = {}) 
   return Number(limit) > 0 ? filtered.slice(0, Number(limit)) : filtered;
 }
 
+export async function getCtaCasino(candidates = []) {
+  const all = await getCasinos();
+  const ids = candidates.map((c) => c?.id ?? c).filter((id) => id != null);
+  const found = ids.map((id) => all.find((c) => c.id === id)).find(Boolean) ?? all[0];
+  return found ? toCard(found) : null;
+}
+
 export async function getCasino(slug) {
   "use cache";
   cacheLife({ stale: 300, revalidate: 300, expire: 3600 });
