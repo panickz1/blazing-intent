@@ -47,7 +47,7 @@ export async function POST(request) {
   }
 
   if (path) revalidatePath(path);
-  tags.forEach((tag) => revalidateTag(tag, "max"));
+  tags.forEach((tag) => revalidateTag(tag, { expire: 0 }));
 
   return Response.json({ revalidated: true, now: Date.now(), path, tags: [...tags] });
 }

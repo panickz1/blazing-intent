@@ -7,10 +7,12 @@ import assetUrl from "@/helpers/functions/assetUrl";
 import { toAttribute } from "@/lib/catalog";
 
 const LOGO = ["logo.filename_disk", "logo.width", "logo.height"];
-const related = (field, collection = field, extra = []) => [
+const related = (field, collection = field, extra = [], itemExtra = []) => [
   ...extra.map((f) => `${field}.${f}`),
-  ...["id", "name", "slug", "status", ...LOGO].map((f) => `${field}.${collection}_id.${f}`),
+  ...["id", "name", "slug", "status", ...LOGO, ...itemExtra].map((f) => `${field}.${collection}_id.${f}`),
 ];
+
+const WITH_CODE = new Set(["regions", "languages"]);
 
 const ATTRIBUTE_FIELDS = ["licences", "providers", "games", "sports", "support", "regions", "languages"];
 
@@ -34,7 +36,7 @@ const REVIEW_FIELDS = [
   ...CARD_FIELDS,
   "licenceUrl", "pros", "cons", "content", "date_updated",
   ...BONUS_FIELDS.map((f) => `bonuses.${f}`),
-  ...ATTRIBUTE_FIELDS.flatMap((f) => related(f)),
+  ...ATTRIBUTE_FIELDS.flatMap((f) => related(f, f, [], WITH_CODE.has(f) ? ["code"] : [])),
   "organization.name", "organization.slug", "organization.status", "organization.website", ...LOGO.map((f) => `organization.${f}`),
   "metatitle", "metadescription", "index",
   "review_nodes.id", "review_nodes.collection", "review_nodes.item.*",

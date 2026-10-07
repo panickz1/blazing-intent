@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, Check, Gift, ShieldCheck, X } from "lucide-react";
+import { ArrowRight, Boxes, Building2, Check, Gamepad2, Gift, Globe, Headset, Languages, ShieldCheck, Trophy, X } from "lucide-react";
 import ContentRenderer from "@/helpers/content/ContentRenderer";
 import Schema from "@/helpers/SEO/Schema";
 import CasinoLogo from "@/components/casino/CasinoLogo";
@@ -64,6 +64,17 @@ function ProConList({ title, items, positive }) {
     </div>
   );
 }
+
+const GROUP_STYLE = {
+  licences: { icon: ShieldCheck },
+  providers: { icon: Boxes },
+  games: { icon: Gamepad2 },
+  sports: { icon: Trophy },
+  support: { icon: Headset },
+  languages: { icon: Languages, cue: "code" },
+  regions: { icon: Globe, cue: "flag" },
+  operators: { icon: Building2 },
+};
 
 function PaymentTable({ payments }) {
   const hasDetails = payments.some((p) => p.minDeposit || p.withdrawalTime);
@@ -192,18 +203,29 @@ export default async function CasinoReview({ params }) {
         </dl>
 
         {details.groups.length > 0 && (
-          <dl className="m-0 mt-6 grid gap-x-6 gap-y-4 rounded-2xl border border-grey-800 bg-grey-900 p-5 md:grid-cols-2">
-            {details.groups.map((g) => (
-              <div key={g.key} className="min-w-0">
-                <dt className="text-[11px] font-semibold uppercase tracking-widest text-fg-muted">{g.label}</dt>
-                <dd className="m-0 mt-2 flex flex-wrap gap-1.5">
-                  {g.items.map((item) => (
-                    <AttributeChip key={item.id} item={item} />
-                  ))}
-                </dd>
-              </div>
-            ))}
-          </dl>
+          <div className="mt-6 grid gap-x-8 gap-y-5 rounded-2xl border border-grey-800 bg-grey-900 p-5 md:grid-cols-2 lg:p-6">
+            {details.groups.map((g) => {
+              const { icon: Icon, cue } = GROUP_STYLE[g.key] ?? {};
+              return (
+                <div key={g.key} className="flex min-w-0 items-start gap-3">
+                  <span aria-hidden className="grid size-9 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary ring-1 ring-inset ring-primary/20">
+                    {Icon && <Icon className="size-[18px]" strokeWidth={2} />}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="m-0 flex items-baseline gap-2 text-[11px] font-semibold uppercase tracking-widest text-fg-muted">
+                      {g.label}
+                      <span className="font-medium normal-case tracking-normal text-grey-500">{g.items.length}</span>
+                    </p>
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {g.items.map((item) => (
+                        <AttributeChip key={item.id} item={item} cue={cue} icon={g.key === "licences" ? ShieldCheck : undefined} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         )}
 
         {card.payments.length > 0 && (

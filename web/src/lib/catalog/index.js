@@ -27,6 +27,7 @@ export function toAttribute(collection, row) {
     id: row.id,
     name: row.name,
     slug: row.slug ?? null,
+    code: row.code ?? null,
     logo: row.logo ? { src: assetUrl(row.logo), width: row.logo.width ?? null, height: row.logo.height ?? null } : null,
     href: catalogHref(collection, row.slug),
   };
