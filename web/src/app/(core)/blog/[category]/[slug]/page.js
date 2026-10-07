@@ -23,7 +23,6 @@ const ARTICLE_FIELDS = [
   "author.linkedin",
   "author.avatar.filename_disk",
   "showCta",
-  "ctaCasino",
   "categories.categories_id.name",
   "categories.categories_id.slug",
 ];
@@ -45,7 +44,7 @@ export default async function Article(props) {
   const found = await getBlogCategory(category);
   const url = `${site.url}/blog/${category}/${slug}`;
   const showCta = item?.showCta !== false;
-  const ctaCasino = showCta ? await getCtaCasino([item?.ctaCasino, generalData?.featuredCasino]) : null;
+  const ctaCasino = showCta ? await getCtaCasino(slug) : null;
 
   return (
     <PageShell>

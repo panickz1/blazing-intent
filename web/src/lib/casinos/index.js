@@ -1,5 +1,5 @@
 import { cacheLife, cacheTag } from "next/cache";
-import { readItems } from "@directus/sdk";
+import { readItems, readSingleton } from "@directus/sdk";
 import apiClient from "@/helpers/functions/apiClient";
 import fetchWithCache from "@/helpers/functions/fetchWithCache";
 import { site } from "@/site.config";
@@ -172,8 +172,27 @@ export async function getCasinoCards({ ids = [], limit, exclude, sortBy } = {}) 
   return Number(limit) > 0 ? filtered.slice(0, Number(limit)) : filtered;
 }
 
-export async function getCtaCasino(candidates = []) {
-  const all = await getCasinos();
+async function optional(request) {
+  try {
+    return await apiClient().request(request);
+  } catch {
+    return null;
+  }
+}
+
+async function getCtaPicks(articleSlug) {
+  "use cache";
+  cacheLife({ stale: 300, revalidate: 300, expire: 3600 });
+  cacheTag("articles", "theme");
+  const [article, theme] = await Promise.all([
+    articleSlug ? optional(readItems("articles", { fields: ["ctaCasino"], filter: { slug: { _eq: articleSlug } }, limit: 1 })) : null,
+    optional(readSingleton("theme", { fields: ["featuredCasino"] })),
+  ]);
+  return [article?.[0]?.ctaCasino, theme?.featuredCasino];
+}
+
+export async function getCtaCasino(articleSlug) {
+  const [all, candidates] = await Promise.all([getCasinos(), getCtaPicks(articleSlug)]);
   const ids = candidates.map((c) => c?.id ?? c).filter((id) => id != null);
   const found = ids.map((id) => all.find((c) => c.id === id)).find(Boolean) ?? all[0];
   return found ? toCard(found) : null;
