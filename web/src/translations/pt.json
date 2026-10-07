@@ -1,0 +1,10 @@
+{
+  "nav": { "menu": "Menu", "openMenu": "Abrir menu" },
+  "footer": { "optimizedBy": "Otimizado por", "legal": "Legal" },
+  "404": {
+    "eyebrow": "Erro 404",
+    "title": "Esta página não existe.",
+    "description": "O link pode estar errado ou a página pode ter mudado de sítio. Volte à página inicial e continue a partir daí.",
+    "buttonHome": "Voltar ao início"
+  }
+}

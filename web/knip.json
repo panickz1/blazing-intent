@@ -1,0 +1,8 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "entry": ["src/app/**/*.{js,jsx}", "src/helpers/SEO/schemas/*.js"],
+  "project": ["src/**/*.{js,jsx}"],
+  "paths": { "@/*": ["src/*"] },
+  "ignore": ["src/components/ui/**"],
+  "ignoreDependencies": ["@radix-ui/.*", "cmdk", "@svgr/webpack", "prettier", "eslint-config-prettier"]
+}

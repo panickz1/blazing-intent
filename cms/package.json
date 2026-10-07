@@ -1,0 +1,22 @@
+{
+  "name": "white-label-cms",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "bootstrap": "directus bootstrap && directus schema apply --yes ./snapshot.yaml",
+    "dev": "directus schema apply --yes ./snapshot.yaml && directus start",
+    "start": "directus start",
+    "snap": "directus schema snapshot --yes ./snapshot.yaml",
+    "setup": "node --env-file=.env scripts/setup.mjs"
+  },
+  "dependencies": {
+    "directus": "^11.4.0",
+    "directus-extension-flexible-editor": "^1.8.3",
+    "pg": "^8.13.1"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  }
+}

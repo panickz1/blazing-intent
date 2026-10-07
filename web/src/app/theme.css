@@ -1,0 +1,72 @@
+:root {
+  --primary-0: 142 64% 45%;
+  --primary-foreground: 218 36% 6%;
+  --accent-2: 38 95% 55%;
+  --accent-2-foreground: 215 40% 8%;
+
+  --grey-50: 210 20% 96%;
+  --grey-100: 210 18% 90%;
+  --grey-200: 212 14% 76%;
+  --grey-300: 213 11% 62%;
+  --grey-400: 214 10% 53%;
+  --grey-500: 215 11% 40%;
+  --grey-600: 215 16% 28%;
+  --grey-700: 215 22% 18%;
+  --grey-800: 216 26% 13%;
+  --grey-900: 217 30% 9%;
+  --grey-950: 218 36% 6%;
+
+  --background: var(--grey-950);
+  --foreground: 0 0% 100%;
+  --fg-muted: 213 12% 62%;
+
+  --hero-stripe: var(--primary-0) / 0.35;
+  --warning: 45 100% 64%;
+  --destructive: 0 78% 64%;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --primary-0: 142 76% 27%;
+  --primary-foreground: 0 0% 100%;
+  --accent-2: 30 95% 33%;
+  --accent-2-foreground: 0 0% 100%;
+
+  --grey-50: 218 30% 10%;
+  --grey-100: 216 24% 16%;
+  --grey-200: 215 18% 26%;
+  --grey-300: 215 14% 34%;
+  --grey-400: 215 11% 42%;
+  --grey-500: 215 10% 54%;
+  --grey-600: 214 12% 70%;
+  --grey-700: 214 16% 82%;
+  --grey-800: 214 22% 90%;
+  --grey-900: 0 0% 100%;
+  --grey-950: 210 25% 97%;
+
+  --white-0: 218 36% 8%;
+  --white-50: 218 36% 8% / 0.04;
+  --white-100: 218 36% 8% / 0.06;
+  --white-200: 218 36% 8% / 0.08;
+  --white-300: 218 36% 8% / 0.16;
+  --white-400: 218 36% 8% / 0.24;
+  --white-500: 218 36% 8% / 0.36;
+  --white-600: 218 36% 8% / 0.48;
+  --white-700: 218 36% 8% / 0.64;
+  --white-800: 218 36% 8% / 0.8;
+  --white-900: 218 36% 8% / 0.92;
+  --white-950: 218 36% 8% / 0.96;
+
+  --background: var(--grey-950);
+  --foreground: var(--white-0);
+  --fg-muted: 215 12% 40%;
+
+  --hero-stripe: var(--primary-0) / 0.18;
+  --warning: 36 95% 36%;
+  --destructive: 0 70% 42%;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
