@@ -71,7 +71,7 @@ export default async function CatalogPage({ params }) {
       <section className={`landing-container pb-6 ${PAGE_TOP}`}>
         <Breadcrumbs items={[{ name: section.label }, { name: item.name, url: href }]} className="mb-5" />
 
-        <header className="flex max-w-[72ch] flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+        <header className="flex max-w-[72ch] flex-col gap-4 sm:flex-row sm:gap-6">
           {item.logo?.filename_disk && (
             <span className="grid size-20 shrink-0 place-items-center rounded-2xl border border-grey-800 bg-grey-900 p-3">
               <Image
