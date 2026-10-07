@@ -55,11 +55,14 @@ export default async function Article(props) {
         nodes={item?.articles_node}
         generalData={generalData}
         headings={headings}
-        category={found?.category ? { name: found.category.name, slug: found.category.slug } : null}
+        breadcrumbs={[
+          { name: site.breadcrumbs.blog, url: "/blog" },
+          found?.category && { name: found.category.name, url: `/blog/${found.category.slug}` },
+          { name: item?.shortTitle || item?.title, url: `/blog/${category}/${slug}` },
+        ].filter(Boolean)}
         showCta={showCta}
         ctaCasino={ctaCasino}
         showAuthor
-        backFallback={category ? `/blog/${category}` : "/blog"}
       />
     </PageShell>
   );

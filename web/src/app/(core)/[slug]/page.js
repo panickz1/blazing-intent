@@ -31,13 +31,15 @@ export default async function Page(props) {
           showCta={false}
           showAuthor={false}
           dateLabel="Last updated"
-          backFallback="/"
+          breadcrumbs={[{ name: pageData?.title, url: `/${(await props.params).slug}` }]}
         />
       </PageShell>
     );
   }
 
-  const content = <ContentRenderer content={pageData?.content} nodes={pageData?.page_nodes} generalData={generalData} />;
+  const slug = (await props.params).slug;
+  const breadcrumbs = pageData?.title ? [{ name: pageData.title, url: `/${slug}` }] : [];
+  const content = <ContentRenderer content={pageData?.content} nodes={pageData?.page_nodes} generalData={{ ...generalData, breadcrumbs }} />;
 
   if (pageData?.template === "landing") {
     return (

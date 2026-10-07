@@ -1,6 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
+import Breadcrumbs from "@/components/Layout/Breadcrumbs";
+import { PAGE_TOP, titleClass } from "@/components/Layout/PageIntro";
 import Schema from "@/helpers/SEO/Schema";
 import { Markdown } from "@/components/Markdown";
 import CasinoListClient from "@/components/casino/CasinoListClient";
@@ -63,22 +64,12 @@ export default async function CatalogPage({ params }) {
 
   return (
     <>
-      <Schema
-        type="breadcrumb"
-        data={{ items: [{ name: "Home", url: "/" }, { name: section.label, url: href }, { name: item.name, url: href }] }}
-      />
       {!isBonus && casinos.length > 0 && (
         <Schema type="itemList" data={{ name: title, items: casinos.map((c) => ({ name: c.name, url: c.reviewHref })) }} />
       )}
 
-      <section className="landing-container pb-6 pt-8 lg:pt-12">
-        <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-[12px] font-semibold uppercase tracking-widest text-fg-muted">
-          <Link href="/" className="hover:text-white">Home</Link>
-          <span aria-hidden>/</span>
-          <span>{section.label}</span>
-          <span aria-hidden>/</span>
-          <span className="text-grey-200">{item.name}</span>
-        </nav>
+      <section className={`landing-container pb-6 ${PAGE_TOP}`}>
+        <Breadcrumbs items={[{ name: section.label }, { name: item.name, url: href }]} className="mb-5" />
 
         <header className="flex max-w-[72ch] flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
           {item.logo?.filename_disk && (
@@ -93,11 +84,11 @@ export default async function CatalogPage({ params }) {
             </span>
           )}
           <div>
-            <p className="m-0 text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">{section.eyebrow}</p>
-            <h1 className="m-0 mt-2 font-heading text-[clamp(30px,4.4vw,52px)] font-black leading-[1.05] tracking-[-0.03em] text-white [text-wrap:balance]">
+            <p className="m-0 mb-2.5 text-[13px] font-semibold text-primary">{section.eyebrow}</p>
+            <h1 className={titleClass("lg")}>
               {title}
             </h1>
-            {item.description && <p className="m-0 mt-4 text-[17px] leading-relaxed text-fg-muted">{item.description}</p>}
+            {item.description && <p className="m-0 mt-3.5 max-w-[64ch] text-[16.5px] leading-relaxed text-grey-200">{item.description}</p>}
           </div>
         </header>
       </section>

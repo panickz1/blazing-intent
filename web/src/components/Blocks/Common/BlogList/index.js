@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
 import { BlogListClient } from "./BlogListClient";
+import PageIntro from "@/components/Layout/PageIntro";
 
 export default async function BlogList(props) {
   const only = (props.categories ?? [])
@@ -27,20 +28,14 @@ export default async function BlogList(props) {
   const allLabel = props.allLabel;
 
   return (
-    <section className="landing-container py-14 lg:py-20">
+    <section className={Heading === "h1" ? "landing-container pb-14 lg:pb-20" : "landing-container py-14 lg:py-20"}>
       <Schema
         type="itemList"
         data={{ name: title, items: shownCards.map((c) => ({ name: c.title, url: c.href })) }}
       />
 
       {Heading === "h1" ? (
-        <div className="max-w-[62ch]">
-          {eyebrow && <p className="m-0 text-[13px] font-semibold text-primary">{eyebrow}</p>}
-          <h1 className="m-0 mt-2 font-heading text-[clamp(30px,4vw,48px)] font-bold leading-[1.08] tracking-[-0.02em] text-white [text-wrap:balance]">
-            {title}
-          </h1>
-          {description && <p className="m-0 mt-3 text-[16px] leading-relaxed text-grey-200">{description}</p>}
-        </div>
+        <PageIntro breadcrumbs={props.generalData?.breadcrumbs} eyebrow={eyebrow} title={title} lead={description} />
       ) : (
         <SectionHeader eyebrow={eyebrow} title={title} lead={description} />
       )}

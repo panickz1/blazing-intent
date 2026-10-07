@@ -1,7 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Boxes, Building2, Check, Gamepad2, Gift, Globe, Headset, Languages, ShieldCheck, Trophy, X } from "lucide-react";
 import ContentRenderer from "@/helpers/content/ContentRenderer";
+import Breadcrumbs from "@/components/Layout/Breadcrumbs";
+import { PAGE_TOP, titleClass } from "@/components/Layout/PageIntro";
 import Schema from "@/helpers/SEO/Schema";
 import CasinoLogo from "@/components/casino/CasinoLogo";
 import Rating from "@/components/casino/Rating";
@@ -127,31 +128,20 @@ export default async function CasinoReview({ params }) {
   return (
     <>
       <Schema type="casinoReview" data={casino} />
-      <Schema
-        type="breadcrumb"
-        data={{
-          items: [
-            { name: "Home", url: "/" },
-            { name: "Casinos", url: "/casinos" },
+      <section className={`landing-container pb-24 lg:pb-16 ${PAGE_TOP}`}>
+        <Breadcrumbs
+          items={[
+            { name: site.breadcrumbs.casinos, url: "/casinos" },
             { name: casino.name, url: card.reviewHref },
-          ],
-        }}
-      />
-
-      <section className="landing-container pb-24 pt-8 lg:pb-16 lg:pt-12">
-        <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-2 text-[12px] font-semibold uppercase tracking-widest text-fg-muted">
-          <Link href="/" className="hover:text-white">Home</Link>
-          <span aria-hidden>/</span>
-          <Link href="/casinos" className="hover:text-white">Casinos</Link>
-          <span aria-hidden>/</span>
-          <span className="text-grey-200">{casino.name}</span>
-        </nav>
+          ]}
+          className="mb-5"
+        />
 
         <div className="grid gap-6 rounded-3xl border border-grey-800 bg-grey-900 p-5 lg:grid-cols-[220px_minmax(0,1fr)_300px] lg:items-center lg:gap-8 lg:p-7">
           <CasinoLogo casino={card} size="lg" className="h-[110px] lg:h-[150px]" />
 
           <div className="min-w-0">
-            <h1 className="m-0 font-heading text-[clamp(30px,4.2vw,48px)] font-black leading-[1.02] tracking-[-0.03em] text-white">
+            <h1 className={titleClass("lg")}>
               {casino.name} review
             </h1>
             <Rating value={card.rating} className="mt-3" />

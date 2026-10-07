@@ -3,7 +3,8 @@ import { notFound } from "next/navigation";
 import HelpContent from "@/components/Help/HelpContent";
 import TableOfContents from "@/components/Article/TableOfContents";
 import MobileTableOfContents from "@/components/Article/MobileTableOfContents";
-import BackButton from "@/components/Article/BackButton";
+import Breadcrumbs from "@/components/Layout/Breadcrumbs";
+import { PAGE_TOP, titleClass } from "@/components/Layout/PageIntro";
 import HelpContact from "@/components/Blocks/Common/HelpContact";
 import Schema from "@/helpers/SEO/Schema";
 import slugify from "@/helpers/functions/slugify";
@@ -55,28 +56,26 @@ export default async function HelpArticlePage({ params }) {
     <>
       {withToc && <MobileTableOfContents headings={toc} contentSelector=".help-article-body" />}
       <article
-        className={`help-article mx-auto grid w-full max-w-[1000px] gap-[clamp(28px,5vw,64px)] px-5 pb-[clamp(40px,5vw,66px)] pt-[clamp(30px,4vw,48px)] lg:px-12 ${
-          withToc ? "lg:grid-cols-[minmax(0,1fr)_216px]" : "grid-cols-[minmax(0,1fr)]"
+        className={`help-article landing-container grid gap-[clamp(28px,5vw,64px)] pb-[clamp(40px,5vw,66px)] ${PAGE_TOP} ${
+          withToc ? "lg:grid-cols-[minmax(0,760px)_216px] lg:justify-between" : "grid-cols-[minmax(0,760px)]"
         }`}
       >
         <div>
-          <div className="mb-[18px] flex flex-wrap items-center gap-x-4 gap-y-3">
-            <BackButton fallback="/help-center" />
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 font-mono text-[11.5px] uppercase tracking-[0.08em] text-grey-400">
-              <Link href="/help-center" className="transition-colors hover:text-white">Help Center</Link>
-              <span aria-hidden>/</span>
-              <Link href={`/help-center#${category?.slug}`} className="transition-colors hover:text-white">
-                {category?.name}
-              </Link>
-            </nav>
-          </div>
+          <Breadcrumbs
+            items={[
+              { name: site.breadcrumbs.help, url: "/help-center" },
+              category?.name && { name: category.name, url: `/help-center#${category.slug}` },
+              { name: article.question, url: `/help-center/${slug}` },
+            ].filter(Boolean)}
+            className="mb-5"
+          />
 
-          <h1 className="font-heading text-[clamp(30px,4.4vw,50px)] font-extrabold leading-[1.02] tracking-[-0.035em] text-white [text-wrap:balance]">
+          <h1 className={titleClass("md")}>
             {article.question}
           </h1>
 
           {lede && (
-            <p className="mt-3.5 max-w-[54ch] text-[clamp(16.5px,1.9vw,19.5px)] leading-[1.5] text-fg-muted [text-wrap:pretty]">
+            <p className="mb-0 mt-3.5 max-w-[64ch] text-[16.5px] leading-relaxed text-grey-200 [text-wrap:pretty]">
               {lede}
             </p>
           )}

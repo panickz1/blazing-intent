@@ -18,6 +18,8 @@ export const site = {
   },
   backgroundColor: "#0A0F17",
 
+  breadcrumbs: { home: "Home", blog: "Guides", casinos: "Casinos", help: "Help Center" },
+
   cta: {
     label: "Top casinos",
     url: env(process.env.NEXT_PUBLIC_CTA_URL, "/casinos"),

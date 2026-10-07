@@ -11,11 +11,10 @@ export default function ArticleLayout({
   nodes,
   generalData,
   headings = [],
-  category = null,
+  breadcrumbs = [],
   showCta = true,
   showAuthor = true,
   dateLabel = null,
-  backFallback = "/blog",
   ctaCasino = null,
 }) {
   const heroSrc = data?.image?.filename_disk;
@@ -28,10 +27,9 @@ export default function ArticleLayout({
       <article className="flex flex-col gap-6 pb-16 lg:pb-24">
         <ArticleHeader
           article={data}
-          category={category}
+          breadcrumbs={breadcrumbs}
           showAuthor={showAuthor}
           dateLabel={dateLabel}
-          backFallback={backFallback}
           image={heroSrc}
           minutes={showAuthor ? readingTime(content) : null}
         />

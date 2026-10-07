@@ -4,6 +4,7 @@ import NextImage from "next/image";
 import { labels, pick } from "@/lib/cms";
 import assetUrl from "@/helpers/functions/assetUrl";
 import { site, isExternalUrl } from "@/site.config";
+import { PAGE_TOP, titleClass } from "@/components/Layout/PageIntro";
 
 const STRIPES = "repeating-linear-gradient(90deg, hsl(var(--hero-stripe)) 0 2px, transparent 2px 14px)";
 const STRIPE_FADE_Y = "linear-gradient(180deg, transparent 0%, black 12%, black 70%, transparent 96%)";
@@ -25,9 +26,9 @@ function StripeBand({ side }) {
 
 function CompactHero({ eyebrow, title, titleAccent, description, chips }) {
   return (
-    <section className="landing-container pb-2 pt-8 lg:pt-11">
+    <section className={`landing-container pb-2 ${PAGE_TOP}`}>
       {eyebrow && <p className="m-0 text-[13px] text-fg-muted">{eyebrow}</p>}
-      <h1 className="m-0 mt-2 font-heading text-[clamp(28px,3.4vw,44px)] font-bold leading-[1.1] tracking-[-0.02em] text-white [text-wrap:balance]">
+      <h1 className={`mt-2 ${titleClass("lg")}`}>
         {title}
         {titleAccent && (
           <>

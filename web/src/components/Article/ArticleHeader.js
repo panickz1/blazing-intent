@@ -1,6 +1,8 @@
 import Image from "next/image";
 import assetUrl from "@/helpers/functions/assetUrl";
 import Link from "next/link";
+import Breadcrumbs from "@/components/Layout/Breadcrumbs";
+import { titleClass } from "@/components/Layout/PageIntro";
 import { Clock } from "lucide-react";
 import {
   HoverCard,
@@ -9,15 +11,13 @@ import {
 } from "@/components/ui/hover-card";
 import IconComponent from "@/helpers/functions/getIcon";
 import formatDate from "@/helpers/functions/formatDate";
-import BackButton from "./BackButton";
 import ArticleHero from "./ArticleHero";
 
 export default function ArticleHeader({
   article,
-  category,
+  breadcrumbs = [],
   showAuthor = true,
   dateLabel = null,
-  backFallback = "/blog",
   image = null,
   minutes = null,
 }) {
@@ -26,28 +26,14 @@ export default function ArticleHeader({
   const authorName = author ? `${author.first_name || ""} ${author.last_name || ""}`.trim() : null;
   const date = formatDate(article?.date_updated || article?.date_created);
 
-  const cat = typeof category === "string" ? { name: category, slug: category } : category;
-
   const imageUrl = assetUrl(image);
 
   return (
     <header className={imageUrl ? "grid gap-6 lg:grid-cols-[minmax(0,1fr)_400px] lg:items-center lg:gap-10" : undefined}>
       <div className="flex flex-col gap-3.5">
-        {cat ? (
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 font-mono text-[11.5px] uppercase tracking-[0.08em] text-grey-400">
-            <Link href="/blog" className="transition-colors hover:text-white">Blog</Link>
-            <span aria-hidden>/</span>
-            <Link href={`/blog/${cat.slug}`} className="transition-colors hover:text-white">
-              {cat.name}
-            </Link>
-          </nav>
-        ) : (
-          <div className="flex flex-wrap items-center gap-3">
-            <BackButton fallback={backFallback} />
-          </div>
-        )}
+        <Breadcrumbs items={breadcrumbs} className="mb-1.5" />
 
-        <h1 className="!mb-0 !mt-0 text-[clamp(26px,3vw,36px)] font-black leading-[1.12] tracking-[-0.01em] text-white [text-wrap:balance]">
+        <h1 className={`!mb-0 !mt-0 ${titleClass("md")}`}>
           {article?.title || article?.shortTitle}
         </h1>
 
