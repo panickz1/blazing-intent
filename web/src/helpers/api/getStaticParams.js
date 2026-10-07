@@ -19,15 +19,16 @@ const getStaticParams = async (CollectionNodeNamespace) => {
             );
         } catch (error) {
             console.warn(`getStaticParams: skipping "${CollectionNodeNamespace}": ${error?.errors?.[0]?.message || error?.message || "request failed"}`);
-            return [];
+            params = [];
         }
 
-        return (params || [])
+        const paths = (params || [])
             .map((data) => ({
                 category: data.categories?.[0]?.categories_id?.name,
                 slug: data.slug,
             }))
             .filter((path) => path.slug !== "homepage");
+        return paths.length ? paths : [{ slug: "__none__" }];
     });
 };
 

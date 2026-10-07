@@ -6,8 +6,10 @@ import Schema from "@/helpers/SEO/Schema";
 import CasinoLogo from "@/components/casino/CasinoLogo";
 import Rating from "@/components/casino/Rating";
 import CasinoList from "@/components/Blocks/Common/CasinoList";
+import AttributeChip from "@/components/catalog/AttributeChip";
+import BonusDetails from "@/components/bonus/BonusDetails";
 import { getGeneralThemeData } from "@/helpers/api";
-import { getCasino, getCasinoParams, toCard } from "@/lib/casinos";
+import { getCasino, getCasinoParams, toCard, toReviewDetails } from "@/lib/casinos";
 import { site } from "@/site.config";
 
 const SPONSORED = "nofollow sponsored noopener";
@@ -63,12 +65,52 @@ function ProConList({ title, items, positive }) {
   );
 }
 
+function PaymentTable({ payments }) {
+  const hasDetails = payments.some((p) => p.minDeposit || p.withdrawalTime);
+  if (!hasDetails) {
+    return (
+      <ul className="m-0 mt-4 flex list-none flex-wrap gap-2 p-0">
+        {payments.map((m) => (
+          <li key={m.id}>
+            <AttributeChip item={m} />
+          </li>
+        ))}
+      </ul>
+    );
+  }
+  return (
+    <div className="mt-4 overflow-x-auto rounded-xl border border-grey-800">
+      <table className="w-full min-w-[420px] border-collapse text-left text-[14px] text-grey-100">
+        <thead className="bg-grey-900">
+          <tr>
+            <th scope="col" className="px-4 py-2.5 text-[12px] font-semibold text-fg-muted">{site.catalog.sections.payments.label}</th>
+            <th scope="col" className="px-4 py-2.5 text-[12px] font-semibold text-fg-muted">{site.bonuses.columns.deposit}</th>
+            <th scope="col" className="px-4 py-2.5 text-[12px] font-semibold text-fg-muted">Withdrawals</th>
+          </tr>
+        </thead>
+        <tbody>
+          {payments.map((m) => (
+            <tr key={m.id} className="border-t border-grey-800">
+              <td className="px-4 py-2.5">
+                <AttributeChip item={m} />
+              </td>
+              <td className="px-4 py-2.5">{m.minDeposit || "-"}</td>
+              <td className="px-4 py-2.5">{m.withdrawalTime || "-"}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default async function CasinoReview({ params }) {
   const { slug } = await params;
   const [casino, generalData] = await Promise.all([getCasino(slug), getGeneralThemeData()]);
   if (!casino) notFound();
 
   const card = toCard(casino);
+  const details = toReviewDetails(casino);
   const { affiliate } = site;
 
   return (
@@ -142,21 +184,58 @@ export default async function CasinoReview({ params }) {
 
         <dl className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
           <Fact label="Our rating">{card.rating.toFixed(1)}/5</Fact>
-          {card.bonusLabel && <Fact label="Welcome bonus">{card.bonusLabel}</Fact>}
+          {card.bonusLabel && <Fact label={site.affiliate.bonusLabel}>{card.bonusLabel}</Fact>}
           {casino.minDeposit && <Fact label="Min. deposit">{casino.minDeposit}</Fact>}
           {casino.withdrawalTime && <Fact label="Withdrawals">{casino.withdrawalTime}</Fact>}
           {casino.established && <Fact label="Established">{casino.established}</Fact>}
-          <Fact label="Payment methods">{card.paymentMethods.length}</Fact>
+          <Fact label={site.catalog.sections.payments.label}>{card.paymentMethods.length}</Fact>
         </dl>
 
-        {card.paymentMethods.length > 0 && (
-          <ul className="mt-4 flex flex-wrap gap-2">
-            {card.paymentMethods.map((m) => (
-              <li key={m} className="rounded-md border border-grey-700 bg-grey-900 px-2.5 py-1 text-[12.5px] font-semibold text-grey-100">
-                {m}
-              </li>
+        {details.groups.length > 0 && (
+          <dl className="m-0 mt-6 grid gap-x-6 gap-y-4 rounded-2xl border border-grey-800 bg-grey-900 p-5 md:grid-cols-2">
+            {details.groups.map((g) => (
+              <div key={g.key} className="min-w-0">
+                <dt className="text-[11px] font-semibold uppercase tracking-widest text-fg-muted">{g.label}</dt>
+                <dd className="m-0 mt-2 flex flex-wrap gap-1.5">
+                  {g.items.map((item) => (
+                    <AttributeChip key={item.id} item={item} />
+                  ))}
+                </dd>
+              </div>
             ))}
-          </ul>
+          </dl>
+        )}
+
+        {card.payments.length > 0 && (
+          <section className="mt-8">
+            <h2 className="m-0 font-heading text-[22px] font-black text-white">{site.catalog.sections.payments.label}</h2>
+            <PaymentTable payments={card.payments} />
+          </section>
+        )}
+
+        {details.bonuses.length > 0 && (
+          <section className="mt-8">
+            <h2 className="m-0 font-heading text-[22px] font-black text-white">{casino.name} bonuses</h2>
+            <ul className="m-0 mt-4 flex list-none flex-col gap-3 p-0">
+              {details.bonuses.map((b) => (
+                <li key={b.id} className="rounded-2xl border border-grey-800 bg-grey-900 p-4 lg:p-5">
+                  <div className="mb-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                    {b.headline && <span className="font-heading text-[24px] font-black leading-none text-accent-2">{b.headline}</span>}
+                    <h3 className="m-0 font-heading text-[17px] font-bold text-white">{b.name}</h3>
+                    {b.description && <p className="m-0 w-full text-[14px] text-grey-200">{b.description}</p>}
+                    {b.types.length > 0 && (
+                      <div className="flex w-full flex-wrap gap-1.5 pt-1">
+                        {b.types.map((t) => (
+                          <AttributeChip key={t.id} item={t} className="py-0.5 text-[11px] uppercase tracking-wide" />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <BonusDetails bonus={b} casino={card} />
+                </li>
+              ))}
+            </ul>
+          </section>
         )}
 
         <div className="mt-8 grid gap-4 md:grid-cols-2">

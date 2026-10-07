@@ -6,13 +6,16 @@ const args = new Set(process.argv.slice(2));
 const CONTENT_COLLECTIONS = [
   "pages", "pages_editor_node",
   "casinos", "casinos_editor_node", "authors", "marketStats", "mediaMentions",
+  "bonuses", "bonusTypes", "bonuses_bonusTypes",
+  "paymentMethods", "providers", "games", "sports", "support", "licences", "organizations", "regions", "languages",
+  "casinos_paymentMethods", "casinos_providers", "casinos_games", "casinos_sports", "casinos_support", "casinos_licences", "casinos_regions", "casinos_languages",
   "articles", "articles_editor_node", "articles_categories", "categories",
   "help_articles", "help_articles_editor_node", "help_articles_related", "help_categories",
   "menus", "theme", "footer", "redirects",
 ];
 
 const BLOCK_COLLECTIONS = [
-  "casinoList", "casinoList_casinos", "casinoSpotlight", "casinoSpotlight_casinos", "casinoComparison", "casinoComparison_casinos", "infoSection", "topicCards", "marketRanking", "timeline", "licenceRegister", "logoStrip", "landingTeam", "landingTeam_authors", "hero", "landingPageHeader", "landingFeatureCards", "featureGrid", "landingSteps", "landingManifesto",
+  "casinoList", "casinoList_casinos", "casinoSpotlight", "casinoSpotlight_casinos", "casinoComparison", "casinoComparison_casinos", "bonusList", "infoSection", "topicCards", "marketRanking", "timeline", "licenceRegister", "logoStrip", "landingTeam", "landingTeam_authors", "hero", "landingPageHeader", "landingFeatureCards", "featureGrid", "landingSteps", "landingManifesto",
   "landingQuestions", "statementBand", "testimonial", "landingTestimonials", "landingProse", "landingPageCta",
   "landingFinalCta", "FAQ", "blogList", "blogList_categories", "landingHelpCenter", "landingHelpContact",
   "helpCallout", "helpChecklist", "heading", "image", "quote", "steps", "proCon",
@@ -211,14 +214,14 @@ const CASINOS = [
 ];
 
 const CASINO_EXTRAS = {
-  "royal-harbor": { wagering: "30x bonus", gameCount: 2800, liveCasino: true },
-  "lucky-ember": { wagering: "35x bonus", gameCount: 4200, liveCasino: true },
-  novaspin: { wagering: "None on winnings", gameCount: 1900, liveCasino: false },
-  "golden-fjord": { wagering: "35x bonus", gameCount: 3100, liveCasino: true },
-  "velvet-ace": { wagering: "20x bonus", gameCount: 1200, liveCasino: true },
-  "starlight-slots": { wagering: "30x bonus", gameCount: 3600, liveCasino: false },
-  bluefin: { wagering: "25x bonus", gameCount: 1500, liveCasino: true },
-  "crown-and-clover": { wagering: "40x winnings", gameCount: 1100, liveCasino: false },
+  "royal-harbor": { gameCount: 2800, liveCasino: true },
+  "lucky-ember": { gameCount: 4200, liveCasino: true },
+  novaspin: { gameCount: 1900, liveCasino: false },
+  "golden-fjord": { gameCount: 3100, liveCasino: true },
+  "velvet-ace": { gameCount: 1200, liveCasino: true },
+  "starlight-slots": { gameCount: 3600, liveCasino: false },
+  bluefin: { gameCount: 1500, liveCasino: true },
+  "crown-and-clover": { gameCount: 1100, liveCasino: false },
 };
 
 const LAUNCHED = {
@@ -231,6 +234,277 @@ const LAUNCHED = {
   novaspin: "2026-08-20",
   "crown-and-clover": "2026-09-15",
 };
+
+const slugify = (value) => value.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+const CATALOG = {
+  paymentMethods: [
+    { name: "Visa", kind: "card", description: "The most widely accepted debit card at online casinos. Deposits are instant; withdrawals usually take one to three working days.",
+      body: "## Using Visa at online casinos\n\nVisa debit cards work at almost every licensed casino. Deposits land instantly and there is rarely a fee.\n\n## Withdrawal times\n\nCard withdrawals take one to three working days once the casino has approved them. E-wallets are faster if speed matters to you." },
+    { name: "Mastercard", kind: "card", description: "Debit Mastercard deposits are instant at most licensed casinos. Withdrawals take one to three working days." },
+    { name: "PayPal", kind: "e-wallet", description: "One of the fastest ways to get paid: most casinos send PayPal withdrawals within 24 hours.",
+      body: "## Why players choose PayPal\n\nYour card details never reach the casino, and withdrawals are among the fastest available.\n\n## Things to check\n\nNot every casino accepts PayPal, and some exclude e-wallet deposits from the welcome bonus. Read the bonus terms before your first deposit." },
+    { name: "Skrill", kind: "e-wallet", description: "E-wallet with same-day withdrawals at most casinos. Some welcome bonuses exclude Skrill deposits." },
+    { name: "Neteller", kind: "e-wallet", description: "E-wallet popular with regular players for fast payouts. Check the bonus terms, as some offers exclude it." },
+    { name: "Paysafecard", kind: "prepaid", description: "Prepaid voucher for deposits without a bank card. You need another method to withdraw." },
+    { name: "Apple Pay", kind: "mobile", description: "Pay from your iPhone with Face ID or Touch ID. Deposits are instant." },
+    { name: "Google Pay", kind: "mobile", description: "Pay from your Android phone in one tap. Deposits are instant." },
+    { name: "Trustly", kind: "bank-transfer", description: "Instant bank payments straight from your online banking, with fast withdrawals back to the same account." },
+    { name: "Bank transfer", kind: "bank-transfer", description: "Classic bank transfer. Reliable for large amounts, but withdrawals take two to five working days." },
+    { name: "Bitcoin", kind: "crypto", description: "Accepted by a few licensed casinos. Values move with the market, so the amount you withdraw can differ from what you deposited." },
+  ],
+  providers: [
+    { name: "NetEnt", description: "Swedish studio behind classic slots such as Starburst and Gonzo's Quest." },
+    { name: "Pragmatic Play", description: "Prolific studio with hundreds of slots and a large live casino." },
+    { name: "Evolution", description: "The leading live dealer studio: blackjack, roulette, baccarat and game shows." },
+    { name: "Play'n GO", description: "Slot studio known for the Book of Dead series." },
+    { name: "Microgaming", description: "One of the oldest casino software providers, known for progressive jackpots." },
+    { name: "Red Tiger", description: "Slots with daily drop jackpots and fast, colourful gameplay." },
+    { name: "Hacksaw Gaming", description: "High-volatility slots and scratch cards with big maximum wins." },
+    { name: "Nolimit City", description: "High-volatility slots with unusual mechanics and very high win caps." },
+    { name: "Push Gaming", description: "Small studio with polished, high-volatility slots." },
+    { name: "Relax Gaming", description: "Slots and aggregation partner known for the Money Train series." },
+  ],
+  games: [
+    { name: "Slots", description: "Video slots, classic three-reel games and Megaways titles." },
+    { name: "Live casino", description: "Real dealers streamed from a studio: blackjack, roulette, baccarat and game shows." },
+    { name: "Blackjack", description: "The table game with one of the lowest house edges when you play basic strategy." },
+    { name: "Roulette", description: "European, American and French roulette. The single-zero wheel gives better odds." },
+    { name: "Baccarat", description: "Simple card game with a low house edge on the banker bet." },
+    { name: "Poker", description: "Video poker and casino poker games played against the house." },
+    { name: "Jackpots", description: "Slots with progressive or daily jackpots." },
+    { name: "Game shows", description: "Live wheel and bonus-round games inspired by TV shows." },
+    { name: "Crash games", description: "Fast games where a multiplier rises until it crashes. Cash out before it does." },
+  ],
+  sports: [
+    { name: "Football", description: "Pre-match and live betting on leagues and cups worldwide." },
+    { name: "Tennis", description: "Every ATP, WTA and Grand Slam match, with live in-play markets." },
+    { name: "Basketball", description: "NBA, EuroLeague and domestic leagues." },
+    { name: "Formula 1", description: "Race winner, podium and head-to-head markets." },
+    { name: "Esports", description: "CS2, League of Legends, Dota 2 and more." },
+  ],
+  support: [
+    { name: "Live chat", description: "Chat with an agent from the casino site or app." },
+    { name: "Email", description: "Written support, usually answered within a day." },
+    { name: "Phone", description: "Speak to an agent by phone." },
+    { name: "Help centre", description: "Self-service articles and FAQs." },
+  ],
+  licences: [
+    { name: "SRIJ", website: "https://www.srij.turismodeportugal.pt", description: "Serviço de Regulação e Inspeção de Jogos, Portugal's gambling regulator." },
+    { name: "Malta Gaming Authority", website: "https://www.mga.org.mt", description: "Malta's regulator, licensing many operators that serve players across Europe." },
+    { name: "UK Gambling Commission", website: "https://www.gamblingcommission.gov.uk", description: "Regulator for gambling in Great Britain." },
+  ],
+  organizations: [
+    { name: "Harbor Entertainment Ltd", website: "https://example.com", description: "Demo operator behind Royal Harbor." },
+    { name: "Ember Gaming Group", website: "https://example.com", description: "Demo operator behind Lucky Ember and Bluefin Casino." },
+    { name: "Nova Interactive", website: "https://example.com", description: "Demo operator behind NovaSpin and Crown & Clover." },
+    { name: "Fjord Leisure AB", website: "https://example.com", description: "Demo operator behind Golden Fjord, Starlight Slots and Velvet Ace." },
+  ],
+  regions: [
+    { name: "Portugal", code: "PT", description: "Online casinos licensed for players in Portugal." },
+    { name: "United Kingdom", code: "GB", description: "Online casinos licensed for players in the UK." },
+    { name: "Ireland", code: "IE", description: "Online casinos accepting players in Ireland." },
+    { name: "Malta", code: "MT", description: "Online casinos accepting players in Malta." },
+    { name: "Spain", code: "ES", description: "Online casinos licensed for players in Spain." },
+  ],
+  languages: [
+    { name: "English", code: "en", description: "Casinos with an English site and support." },
+    { name: "Portuguese", code: "pt", description: "Casinos with a Portuguese site and support." },
+    { name: "Spanish", code: "es", description: "Casinos with a Spanish site and support." },
+    { name: "German", code: "de", description: "Casinos with a German site and support." },
+    { name: "French", code: "fr", description: "Casinos with a French site and support." },
+  ],
+  bonusTypes: [
+    { name: "Welcome", slug: "welcome-bonuses", description: "Offers for new players on sign-up or first deposit." },
+    { name: "Deposit match", slug: "deposit-bonuses", description: "The casino adds a percentage of your deposit as bonus money." },
+    { name: "Free spins", slug: "free-spins", description: "Spins on selected slots, sometimes with no wagering on winnings." },
+    { name: "No deposit", slug: "no-deposit-bonuses", description: "Bonus money or spins without depositing. Winnings are usually capped." },
+    { name: "Cashback", slug: "cashback", description: "A share of your net losses returned, often with no wagering." },
+    { name: "Reload", slug: "reload-bonuses", description: "Deposit bonuses for existing players." },
+    { name: "Free bets", slug: "free-bets", description: "Sports bets on the house. Only winnings are paid out, not the stake." },
+  ],
+};
+
+const CASINO_CATALOG = {
+  "royal-harbor": { organization: "Harbor Entertainment Ltd", licences: ["SRIJ", "Malta Gaming Authority"], providers: ["NetEnt", "Pragmatic Play", "Evolution", "Play'n GO", "Red Tiger", "Nolimit City"], games: ["Slots", "Live casino", "Blackjack", "Roulette", "Baccarat", "Game shows", "Jackpots"], sports: [], support: ["Live chat", "Email", "Phone", "Help centre"], regions: ["Portugal", "Malta", "Ireland"], languages: ["English", "Portuguese"] },
+  "lucky-ember": { organization: "Ember Gaming Group", licences: ["SRIJ"], providers: ["Pragmatic Play", "Play'n GO", "Hacksaw Gaming", "Nolimit City", "Push Gaming", "Relax Gaming", "Red Tiger", "Evolution"], games: ["Slots", "Live casino", "Roulette", "Jackpots", "Crash games"], sports: ["Football", "Tennis", "Basketball"], support: ["Live chat", "Email"], regions: ["Portugal", "Spain"], languages: ["English", "Portuguese", "Spanish"] },
+  novaspin: { organization: "Nova Interactive", licences: ["Malta Gaming Authority"], providers: ["Pragmatic Play", "Hacksaw Gaming", "Push Gaming", "Relax Gaming"], games: ["Slots", "Jackpots", "Crash games"], sports: [], support: ["Live chat", "Help centre"], regions: ["Malta", "Ireland", "United Kingdom"], languages: ["English"] },
+  "golden-fjord": { organization: "Fjord Leisure AB", licences: ["Malta Gaming Authority", "UK Gambling Commission"], providers: ["NetEnt", "Evolution", "Microgaming", "Play'n GO", "Red Tiger"], games: ["Slots", "Live casino", "Blackjack", "Roulette", "Baccarat", "Poker", "Jackpots"], sports: ["Football", "Tennis", "Formula 1", "Esports"], support: ["Live chat", "Email", "Phone"], regions: ["United Kingdom", "Ireland", "Malta"], languages: ["English", "German", "French"] },
+  "velvet-ace": { organization: "Fjord Leisure AB", licences: ["SRIJ"], providers: ["Evolution", "NetEnt", "Pragmatic Play"], games: ["Live casino", "Blackjack", "Roulette", "Baccarat", "Poker", "Slots"], sports: [], support: ["Live chat", "Email"], regions: ["Portugal"], languages: ["English", "Portuguese"] },
+  "starlight-slots": { organization: "Fjord Leisure AB", licences: ["Malta Gaming Authority"], providers: ["Microgaming", "Red Tiger", "NetEnt", "Play'n GO", "Pragmatic Play"], games: ["Slots", "Jackpots", "Game shows"], sports: [], support: ["Live chat", "Email", "Help centre"], regions: ["Malta", "Ireland", "Spain"], languages: ["English", "Spanish"] },
+  bluefin: { organization: "Ember Gaming Group", licences: ["SRIJ"], providers: ["Pragmatic Play", "Evolution", "Play'n GO"], games: ["Slots", "Live casino", "Roulette", "Blackjack"], sports: ["Football", "Basketball"], support: ["Email", "Help centre"], regions: ["Portugal"], languages: ["Portuguese", "English"] },
+  "crown-and-clover": { organization: "Nova Interactive", licences: ["UK Gambling Commission"], providers: ["Hacksaw Gaming", "Push Gaming", "Pragmatic Play"], games: ["Slots", "Crash games"], sports: [], support: ["Live chat", "Email"], regions: ["United Kingdom", "Ireland"], languages: ["English"] },
+  "silver-mirage": { organization: null, licences: ["Malta Gaming Authority"], providers: ["Pragmatic Play"], games: ["Slots"], sports: [], support: ["Email"], regions: ["Malta"], languages: ["English"] },
+};
+
+const PAYOUT_BY_KIND = {
+  "e-wallet": "Under 24 hours",
+  mobile: "1 to 3 days",
+  card: "1 to 3 days",
+  prepaid: "Deposits only",
+  "bank-transfer": "2 to 5 days",
+  crypto: "Under 24 hours",
+};
+
+const claim = (...steps) => steps.map((text) => ({ text }));
+
+const BONUSES = {
+  "royal-harbor": [
+    { name: "Welcome bonus", headline: "€500", amount: 500, description: "100% up to €500 + 200 free spins", types: ["Welcome", "Deposit match", "Free spins"], freeSpins: 200, wagering: "30x bonus", minDeposit: "€10", code: "HARBOR500",
+      howToClaim: claim("Sign up at Royal Harbor with the code HARBOR500", "Deposit at least €10", "Get 100% up to €500 and 20 free spins a day for 10 days"),
+      info: "The deposit match is credited straight away. Free spins arrive in daily batches of 20 on Book of Dead, each worth €0.10. Bonus money must be wagered 30 times within 30 days, with a maximum bet of €5 while wagering." },
+    { name: "Weekend reload", headline: "50%", amount: 200, description: "50% up to €200 every Friday", types: ["Reload", "Deposit match"], wagering: "30x bonus", minDeposit: "€20",
+      howToClaim: claim("Opt in from the Promotions page on Friday", "Deposit at least €20 before Sunday midnight", "Get 50% of your deposit up to €200"),
+      info: "Available once per weekend to verified players." },
+  ],
+  "lucky-ember": [
+    { name: "Welcome package", headline: "€300", amount: 300, description: "Up to €300 across your first three deposits", types: ["Welcome", "Deposit match"], wagering: "35x bonus", minDeposit: "€10",
+      howToClaim: claim("Register at Lucky Ember", "Make your first deposit of €10 or more for a 100% match up to €100", "Repeat on your second and third deposits for up to €100 each"),
+      info: "Each part of the package must be claimed within 7 days of the previous one. Slots count 100% towards wagering, table games 10%." },
+    { name: "Weekly cashback", headline: "10%", amount: 100, description: "10% of weekly net losses back, no wagering", types: ["Cashback"], wagering: "None", minDeposit: null, maxWin: "€100 per week",
+      howToClaim: claim("Play on slots during the week", "Cashback is calculated every Monday", "It lands in your cash balance with no wagering"),
+      info: "Applies to net losses on slots from Monday to Sunday, up to €100 a week." },
+    { name: "Sports free bet", headline: "€10", amount: 10, description: "Bet €10, get a €10 free bet", types: ["Welcome", "Free bets"], wagering: null, minDeposit: "€10", minOdds: "1.50",
+      howToClaim: claim("Register and deposit €10", "Place a first sports bet of €10 at odds of 1.50 or higher", "Get a €10 free bet once it settles"),
+      info: "The free bet stake is not returned with winnings. It expires 7 days after it is credited." },
+  ],
+  novaspin: [
+    { name: "No-wagering free spins", headline: "200 FS", amount: 200, description: "200 free spins with no wagering on winnings", types: ["Welcome", "Free spins"], freeSpins: 200, wagering: "None", minDeposit: "€20",
+      howToClaim: claim("Sign up at NovaSpin", "Deposit €20 or more", "Get 200 spins on Big Bass Bonanza, 50 a day for 4 days"),
+      info: "Each spin is worth €0.10. Winnings are paid as cash, with no wagering and no cap." },
+  ],
+  "golden-fjord": [
+    { name: "High roller welcome", headline: "€1,000", amount: 1000, description: "100% up to €1,000 for high rollers", types: ["Welcome", "Deposit match"], wagering: "35x bonus", minDeposit: "€20",
+      howToClaim: claim("Open an account at Golden Fjord", "Deposit at least €20 (€1,000 for the full bonus)", "The bonus is credited instantly"),
+      info: "Wagering is 35 times the bonus within 60 days. Maximum bet while wagering is €10." },
+    { name: "Sports welcome", headline: "€100", amount: 100, description: "100% up to €100 in free bets", types: ["Welcome", "Free bets"], wagering: "5x", minDeposit: "€10", minOdds: "1.80",
+      howToClaim: claim("Choose the sports offer when you register", "Deposit and bet at least €10 at odds of 1.80 or higher", "Get free bets matching your first bet up to €100"),
+      info: "Free bets are split into four equal tokens and expire after 14 days." },
+  ],
+  "velvet-ace": [
+    { name: "Welcome bonus", headline: "€100", amount: 100, description: "100% up to €100 + 50 free spins", types: ["Welcome", "Deposit match", "Free spins"], freeSpins: 50, wagering: "20x bonus", minDeposit: "€10",
+      howToClaim: claim("Register at Velvet Ace", "Deposit €10 or more", "Get 100% up to €100 and 50 free spins"),
+      info: "One of the lowest wagering requirements on our list. Blackjack counts 20% towards wagering." },
+  ],
+  "starlight-slots": [
+    { name: "Welcome bonus", headline: "€250", amount: 250, description: "Up to €250 + 100 free spins", types: ["Welcome", "Deposit match", "Free spins"], freeSpins: 100, wagering: "30x bonus", minDeposit: "€15", code: "STAR250",
+      howToClaim: claim("Sign up with the code STAR250", "Deposit at least €15", "Get 100% up to €250 and 100 spins on Starburst"),
+      info: "Free spins are worth €0.10 each and winnings carry 30x wagering." },
+    { name: "Daily jackpot spins", headline: "20 FS", amount: 20, description: "20 free spins on a jackpot slot every day", types: ["Free spins"], freeSpins: 20, wagering: "30x winnings", minDeposit: null, maxWin: "€50",
+      howToClaim: claim("Log in every day", "Open the Daily Spins tile", "Play your 20 spins on the featured jackpot slot"),
+      info: "Available to players who deposited in the last 30 days." },
+  ],
+  bluefin: [
+    { name: "Welcome bonus", headline: "€150", amount: 150, description: "100% up to €150", types: ["Welcome", "Deposit match"], wagering: "25x bonus", minDeposit: "€10",
+      howToClaim: claim("Register at Bluefin Casino", "Deposit at least €10", "Get 100% of your deposit up to €150"),
+      info: "Bonus money must be wagered 25 times within 21 days." },
+  ],
+  "crown-and-clover": [
+    { name: "No-deposit bonus", headline: "€20", amount: 20, description: "€20 free on sign-up, no deposit needed", types: ["Welcome", "No deposit"], wagering: "40x winnings", minDeposit: null, maxWin: "€100", code: "CLOVER20",
+      howToClaim: claim("Register at Crown & Clover with the code CLOVER20", "Verify your identity", "€20 is added to your bonus balance"),
+      info: "Winnings from the no-deposit bonus are capped at €100 and must be wagered 40 times." },
+  ],
+};
+
+async function ensureCatalog() {
+  const ids = {};
+  for (const [collection, items] of Object.entries(CATALOG)) {
+    const existing = await api("GET", `/items/${collection}?fields=id,name&limit=-1`);
+    ids[collection] = Object.fromEntries(existing.map((r) => [r.name, r.id]));
+    const missing = items.filter((i) => !ids[collection][i.name]);
+    if (missing.length) {
+      const created = await api("POST", `/items/${collection}`, missing.map((i, n) => ({ status: "published", sort: existing.length + n + 1, slug: slugify(i.name), index: true, ...i })));
+      for (const r of created) ids[collection][r.name] = r.id;
+      console.log(`  ${created.length} ${collection}`);
+    }
+  }
+
+  const casinos = await api("GET", "/items/casinos?fields=id,slug,minDeposit,organization,paymentMethods,providers,bonuses&limit=-1");
+  const seed = Object.fromEntries(CASINOS.map((c) => [c.slug, c]));
+  const kindOf = Object.fromEntries(CATALOG.paymentMethods.map((m) => [m.name, m.kind]));
+  let linked = 0;
+  let offers = 0;
+  for (const c of casinos) {
+    const plan = CASINO_CATALOG[c.slug];
+    if (!plan) continue;
+    const patch = {};
+    const link = (field, names) => names.map((name) => ({ [`${field}_id`]: ids[field][name] })).filter((r) => r[`${field}_id`]);
+    if (!c.paymentMethods?.length) {
+      const payments = seed[c.slug]?.payments ?? ["Visa", "Bank transfer"];
+      patch.paymentMethods = payments.map((name) => ({
+        paymentMethods_id: ids.paymentMethods[name],
+        minDeposit: kindOf[name] === "crypto" ? "€20" : c.minDeposit || "€10",
+        withdrawalTime: PAYOUT_BY_KIND[kindOf[name]],
+      })).filter((r) => r.paymentMethods_id);
+    }
+    if (!c.providers?.length) {
+      for (const field of ["licences", "providers", "games", "sports", "support", "regions", "languages"]) patch[field] = link(field, plan[field]);
+      if (!c.organization && plan.organization) patch.organization = ids.organizations[plan.organization];
+    }
+    if (Object.keys(patch).length) {
+      await api("PATCH", `/items/casinos/${c.id}`, patch);
+      linked++;
+    }
+    if (!c.bonuses?.length && BONUSES[c.slug]) {
+      await api("POST", "/items/bonuses", BONUSES[c.slug].map(({ types, ...b }, i) => ({
+        status: "published",
+        sort: i + 1,
+        casino: c.id,
+        slug: slugify(`${c.slug} ${b.name}`),
+        ...b,
+        bonusTypes: types.map((t) => ({ bonusTypes_id: ids.bonusTypes[t] })),
+      })));
+      offers += BONUSES[c.slug].length;
+    }
+  }
+  if (linked) console.log(`  attributes linked to ${linked} casinos`);
+  if (offers) console.log(`  ${offers} bonuses`);
+}
+
+async function ensureBonusPage() {
+  if ((await api("GET", "/items/pages?filter[slug][_eq]=welcome-bonuses&fields=id")).length) return;
+  const welcome = (await api("GET", "/items/bonusTypes?filter[slug][_eq]=welcome-bonuses&fields=id"))[0]?.id ?? null;
+  const year = new Date().getFullYear();
+  await createPage({
+    slug: "welcome-bonuses",
+    title: "Welcome bonuses",
+    template: "landing",
+    backlight: "primary",
+    metatitle: `Best Casino Welcome Bonuses (${year}): Compared and Explained`,
+    metadescription: "Every welcome bonus from licensed online casinos in one table: wagering, minimum deposit, codes and how to claim each offer.",
+    blocks: [
+      ["bonusList", { headingLevel: "h1", eyebrow: "Bonuses", title: "Welcome bonuses", titleAccent: "compared.", description: "Every welcome offer from the licensed casinos we review. Compare wagering, minimum deposit and value, then open a row to see how to claim it.", bonusType: welcome, sortBy: "recommended", showSearch: true, searchPlaceholder: "Search casinos", initialCount: 8 }],
+      ["landingProse", { eyebrow: "The basics", title: "What is a welcome bonus?", body: "A welcome bonus, also called a sign-up bonus, is an offer a casino gives new players when they register or make their first deposit.\n\nIt can be extra money added to your first deposit, free spins on selected slots or, at sports betting sites, free bets. Casinos use these offers to get you to try the site, and they are a good way to find out whether a casino has everything you are looking for." }],
+      ["infoSection", { eyebrow: "Types", title: "Types of welcome bonus", lead: "Most welcome offers are one of three types, or a mix of them.", columns: "3", items: [
+        { icon: "wallet", title: "Deposit match", body: "The casino adds a percentage of your first deposit as bonus money, for example 100% up to €500. It is the most common welcome offer." },
+        { icon: "star", title: "Free spins", body: "A set number of spins on selected slots. The best offers pay winnings as cash with no wagering." },
+        { icon: "gift", title: "No deposit", body: "Bonus money or spins just for signing up. Winnings are usually capped, so treat it as a free trial." },
+      ] }],
+      ["infoSection", { eyebrow: "Tips", title: "How to pick the best welcome bonus", lead: "The biggest headline number is rarely the best deal. Check these six things first.", columns: "3", band: true, items: [
+        { icon: "check", title: "Eligibility", body: "Welcome offers are for new players only. If you already have an account, or had one before, you will probably not qualify." },
+        { icon: "scale", title: "Wagering", body: "How many times you must bet the bonus before you can withdraw. 20x or less is good; above 40x is hard to clear." },
+        { icon: "clock", title: "Time limit", body: "Check how long you have to use the bonus and meet the wagering. Short deadlines force you to play fast." },
+        { icon: "chart", title: "Real value", body: "Compare the match percentage, the maximum amount and any cap on winnings, not only the headline figure." },
+        { icon: "shield", title: "Licence and reputation", body: "A big bonus at an unlicensed casino is worthless if it never pays out. Every casino in our table is licensed." },
+        { icon: "search", title: "Terms and conditions", body: "Maximum bet, game weighting and excluded payment methods can change the value of an offer. Read them before you deposit." },
+      ] }],
+      ["FAQ", { eyebrow: "FAQ", title: "Welcome bonus questions", schema: true, entries: [
+        { question: "How do welcome bonuses work?", answer: "You register, opt in to the offer (sometimes with a code) and make a qualifying deposit if one is needed. The bonus is added to your account and becomes withdrawable once you meet the wagering requirement." },
+        { question: "Do welcome bonuses need a deposit?", answer: "Most do, usually €10 to €20. No-deposit bonuses are the exception: you get a small amount or some free spins just for signing up." },
+        { question: "Can I withdraw a welcome bonus straight away?", answer: "Usually not. You must meet the wagering requirement first. Free spins with no wagering are the exception: their winnings are paid as cash." },
+        { question: "What happens if I do not meet the wagering in time?", answer: "The bonus and any winnings made with it are removed from your account. Check the deadline before you opt in." },
+        { question: "Which welcome bonus is the best?", answer: "The one whose terms you can realistically meet. A smaller bonus with low wagering is often worth more than a large one with strict terms." },
+      ] }],
+    ],
+  });
+
+  const main = (await api("GET", "/items/menus?filter[key][_eq]=main-menu&fields=id,entrys"))[0];
+  if (main && !main.entrys?.some((e) => e.url === "/welcome-bonuses")) {
+    const entrys = [...(main.entrys ?? [])];
+    entrys.splice(1, 0, { anchor: "Bonuses", url: "/welcome-bonuses" });
+    await api("PATCH", `/items/menus/${main.id}`, { entrys });
+  }
+}
 
 const MARKET_BASE = {
   "royal-harbor": [118000, 121500],
@@ -503,7 +777,9 @@ async function rebuildHomepage() {
   console.log("Rebuilding the homepage (the previous one is kept as an archived page):");
   await ensureDemoExtras();
   await ensureRegulationContent();
+  await ensureCatalog();
   await createHomepage();
+  await ensureBonusPage();
 }
 
 function reviewDoc(c) {
@@ -545,11 +821,7 @@ async function seed() {
       brandColor: c.brandColor,
       rating: c.rating,
       affiliateUrl: `https://example.com/?casino=${c.slug}&ref=demo`,
-      bonusLabel: c.bonusLabel,
-      bonusValue: c.bonusValue,
-      bonusDescription: c.bonusDescription,
       highlights: c.highlights.map((text) => ({ text })),
-      paymentMethods: c.payments.map((name) => ({ name })),
       licence: "Demo licence 000",
       ...CASINO_EXTRAS[c.slug],
       established: c.established,
@@ -608,6 +880,7 @@ async function seed() {
 
   await ensureDemoExtras();
   await ensureRegulationContent();
+  await ensureCatalog();
   await createHomepage();
   const year = new Date().getFullYear();
 
@@ -696,6 +969,8 @@ async function seed() {
   await prosePage("terms", "Terms of Service", "Legal", "The terms that apply when you use this website.",
     "## Placeholder\n\nReplace this with your own terms before going live.");
 
+  await ensureBonusPage();
+
   await api("POST", "/items/redirects", { from: "/home", to: "/" });
   console.log("  redirect /home -> /");
 }
@@ -704,6 +979,10 @@ await login();
 await grantPublicPermissions();
 await repairDisplayTemplates();
 await setupRevalidationFlow();
-if (args.has("--rebuild-homepage")) await rebuildHomepage();
+if (args.has("--demo-catalog")) {
+  console.log("Adding the demo attributes, bonuses and bonus page:");
+  await ensureCatalog();
+  await ensureBonusPage();
+} else if (args.has("--rebuild-homepage")) await rebuildHomepage();
 else if (!args.has("--no-seed")) await seed();
 console.log("Done.");

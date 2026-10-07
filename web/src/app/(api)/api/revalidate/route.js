@@ -15,7 +15,10 @@ const TAGGED_COLLECTIONS = new Set([
   "mediaMentions",
 ]);
 
+const CASINO_DATA = /^(casinos_.+|bonuses|bonusTypes|bonuses_bonusTypes|paymentMethods|providers|games|sports|support|licences|organizations|regions|languages)$/;
+
 function tagsForCollection(raw) {
+  if (CASINO_DATA.test(raw)) return ["casinos", raw, "blocks"];
   const collection = raw.replace(/_editor_node$/, "");
   if (collection !== raw) return [collection, "blocks"];
   if (TAGGED_COLLECTIONS.has(collection)) return [collection];

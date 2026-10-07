@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "cms",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["--cwd", "cms", "start"],
+      "port": 8055
+    },
+    {
+      "name": "web",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["--cwd", "web", "dev"],
+      "port": 3000
+    }
+  ]
+}

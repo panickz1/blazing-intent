@@ -4,6 +4,8 @@ import apiClient from "@/helpers/functions/apiClient";
 import { getBlogData } from "@/lib/blog";
 import { getHelpData, hasPage } from "@/lib/help";
 import { getCasinos } from "@/lib/casinos";
+import { getSection, getEditorialSlugs, getCatalogItems, getCatalogCasinoIds } from "@/lib/catalog";
+import { getBonusRows } from "@/lib/bonuses";
 import { site } from "@/site.config";
 
 const iso = (...dates) => new Date(dates.find(Boolean) || Date.now()).toISOString();
@@ -20,6 +22,25 @@ async function getIndexablePages() {
   } catch {
     return [];
   }
+}
+
+async function getCatalogUrls(activeIds) {
+  const urls = [];
+  const editorial = new Set(await getEditorialSlugs());
+  for (const path of Object.keys(site.catalog.sections)) {
+    const section = getSection(path);
+    if (!section) continue;
+    for (const item of await getCatalogItems(section.collection)) {
+      if (item.index === false || editorial.has(item.slug)) continue;
+      const count =
+        section.collection === "bonusTypes"
+          ? (await getBonusRows({ type: item.id })).length
+          : (await getCatalogCasinoIds(section, item.id)).filter((id) => activeIds.has(id)).length;
+      if (!item.body?.trim() && count < site.catalog.minCasinosToIndex) continue;
+      urls.push({ url: `${site.url}/${path}/${item.slug}`, lastModified: iso(item.date_updated), changeFrequency: "weekly", priority: 0.7 });
+    }
+  }
+  return urls;
 }
 
 export default async function sitemap() {
@@ -50,6 +71,8 @@ export default async function sitemap() {
       priority: 0.9,
     });
   }
+
+  urls.push(...(await getCatalogUrls(new Set(casinos.map((c) => c.id)))));
 
   for (const article of blog.articles) {
     const category = article.categories?.[0]?.categories_id;

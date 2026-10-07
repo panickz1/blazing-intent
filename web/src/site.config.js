@@ -43,6 +43,42 @@ export const site = {
     sortOptions: { recommended: "Recommended", new: "Newest", bonus: "Bonus" },
   },
 
+  catalog: {
+    minCasinosToIndex: 3,
+    emptyLabel: "No casinos listed yet.",
+    moreLabel: "More {label}",
+    sections: {
+      payments: { collection: "paymentMethods", field: "paymentMethods", enabled: true, label: "Payment methods", title: "Casinos that accept {name}", eyebrow: "Payment method" },
+      providers: { collection: "providers", field: "providers", enabled: true, label: "Game providers", title: "Casinos with {name} games", eyebrow: "Game provider" },
+      games: { collection: "games", field: "games", enabled: true, label: "Games", title: "Best online casinos for {name}", eyebrow: "Games" },
+      sports: { collection: "sports", field: "sports", enabled: true, label: "Sports", title: "Betting sites for {name}", eyebrow: "Sports betting" },
+      licences: { collection: "licences", field: "licences", enabled: true, label: "Licences", title: "Casinos licensed by {name}", eyebrow: "Regulator" },
+      bonuses: { collection: "bonusTypes", enabled: true, label: "Bonus types", title: "{name} offers", eyebrow: "Bonuses" },
+      support: { collection: "support", field: "support", enabled: false, label: "Support", title: "Casinos with {name} support", eyebrow: "Customer support" },
+      regions: { collection: "regions", field: "regions", enabled: false, label: "Regions", title: "Online casinos in {name}", eyebrow: "Region" },
+      languages: { collection: "languages", field: "languages", enabled: false, label: "Languages", title: "Casinos in {name}", eyebrow: "Language" },
+      operators: { collection: "organizations", field: "organization", single: true, enabled: false, label: "Operator", title: "Casinos run by {name}", eyebrow: "Operator" },
+    },
+  },
+
+  bonuses: {
+    columns: { casino: "Casino", wagering: "Wagering", deposit: "Min. deposit", bonus: "Bonus" },
+    howToClaim: "How to claim",
+    info: "General information",
+    code: "Code",
+    freeSpins: "Free spins",
+    maxWin: "Max win",
+    minOdds: "Min. odds",
+    validUntil: "Valid until",
+    none: "None",
+    searchLabel: "Search bonuses",
+    searchPlaceholder: "Search casinos",
+    empty: "No bonuses match your search.",
+    showAllLabel: "Show all {count} bonuses",
+    detailsLabel: "Details",
+    allHeading: "All {name} bonuses",
+  },
+
   community: {
     label: "Join the community",
     url: env(process.env.NEXT_PUBLIC_COMMUNITY_URL, ""),

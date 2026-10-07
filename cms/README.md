@@ -16,6 +16,7 @@ Directus 11 with the flexible-editor extension. The schema lives in `snapshot.ya
 
 - `--no-seed` only permissions and the flow. Use this on production.
 - `--force-seed` adds the demo content even when pages already exist.
+- `--demo-catalog` adds the demo attributes (payment methods, providers, games...), links them to the demo casinos, creates their bonuses and the `/welcome-bonuses` page. Only fills what is empty, so it is safe to rerun.
 - `--rebuild-homepage` replaces the homepage with the current demo homepage (the old one is kept as an archived page) and fills the demo casinos' newer fields. Use it after pulling a new starter version into an existing local install.
 
 It logs in with `ADMIN_EMAIL`/`ADMIN_PASSWORD`, or uses `SETUP_DIRECTUS_TOKEN` if set. Point it at another instance with `SETUP_DIRECTUS_URL`.
@@ -34,7 +35,10 @@ It also repairs any collection display template that points at a missing field. 
 
 | Collection | Used for |
 | --- | --- |
-| `casinos` + `casinos_editor_node` | Operators (a suspended or revoked `licenceStatus` removes a casino from rankings, reviews and `/go/` links; it stays in the licence register): rating, bonus, highlights, payment methods, licence, affiliate URL, pros/cons and the review body (flexible editor). Review at `/review/<slug>`, outbound link `/go/<slug>`. |
+| `casinos` + `casinos_editor_node` | Operators (a suspended or revoked `licenceStatus` removes a casino from rankings, reviews and `/go/` links; it stays in the licence register): rating, highlights, licence number, affiliate URL, pros/cons, the review body (flexible editor), its bonuses and its attributes. Review at `/review/<slug>`, outbound link `/go/<slug>`. |
+| `bonuses` (Casinos > Bonus) | Every offer, with its casino (M2O), types, headline, amount, wagering, minimum deposit, code, how to claim, info and expiry. A casino's first bonus (drag to order on the casino) is the headline on cards. Expired bonuses (`validUntil`) drop out of lists. |
+| `bonusTypes` (Casinos > Bonus) | Welcome, Free spins, No deposit, Cashback... M2M with bonuses. Page: `/bonuses/<slug>`. |
+| Attributes (Casinos > Attributes) | `paymentMethods`, `providers`, `games`, `sports`, `support`, `licences` (regulators), `regions`, `languages` (M2M with casinos through `casinos_<name>`) and `organizations` (M2O `casinos.organization`). Shared records: one logo or name change updates every review. All have the same base fields (name, slug, logo, description, Markdown body, SEO, index) so each can have its own page. `casinos_paymentMethods` also holds the casino's minimum deposit and withdrawal time for that method. |
 | `mediaMentions` | Press coverage for the logo strip: name, logo, link. |
 | `marketStats` | One row per casino per month (e.g. searches). Feeds the `marketRanking` block, which shows the latest month and the change from the previous one. |
 | `authors` | Writers and reviewers (photo, role, bio, experience, expertise, favourite, tip, links). Shown by the `landingTeam` block; each has a slug for future author pages. |
