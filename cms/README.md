@@ -64,4 +64,7 @@ Page templates: `landing` (full bleed, optional backlight glow), `article` (read
 ## Production notes
 
 - Directus refuses flow requests to private IPs by default. That is right for production; the `IMPORT_IP_DENY_LIST` line in `.env.example` is for local testing only.
-- Uploads go to local disk by default. For production, configure a storage adapter (S3, Spaces, R2) and set `NEXT_PUBLIC_CDN_URL` on the site to the bucket's public URL.
+- Uploads go to local disk by default, which a redeploy wipes unless it is on a volume. For production use a bucket: the `STORAGE_S3_*` block in `.env.example` (S3, R2, Spaces, Railway Buckets).
+- Railway Buckets are private. Directus reads them with the bucket credentials and serves files at `/assets/<id>`; the website loads them from there through `next/image`, which caches each size for a year. Leave `NEXT_PUBLIC_CDN_URL` empty. Use path style (`STORAGE_S3_FORCE_PATH_STYLE=true`) only if the bucket's Credentials tab says so.
+- With a public bucket or CDN in front of it, set `NEXT_PUBLIC_CDN_URL` on the site to its public URL instead.
+- Every file field needs its relation to `directus_files` (Directus creates it when you add an Image field in the admin). Without it the API returns only the id and the site cannot build the image URL.

@@ -4,7 +4,7 @@ import { getCasinoCards } from "@/lib/casinos";
 import { SectionHeader } from "@/components/ui/section-header";
 import CasinoLogo from "@/components/casino/CasinoLogo";
 import Rating from "@/components/casino/Rating";
-import { VisitButton } from "@/components/casino/parts";
+import { PaymentLogos, VisitButton } from "@/components/casino/parts";
 
 const DEFAULT_COLUMNS = ["bonus", "wagering", "minDeposit", "withdrawalTime", "paymentMethods"];
 
@@ -25,13 +25,7 @@ const COLUMNS = {
   withdrawalTime: { label: "Withdrawal time", render: (c) => c.withdrawalTime },
   paymentMethods: {
     label: "Payment methods",
-    render: (c) =>
-      c.paymentMethods.length > 0 && (
-        <>
-          {c.paymentMethods.slice(0, 3).join(", ")}
-          {c.paymentMethods.length > 3 && <span className="text-fg-muted"> +{c.paymentMethods.length - 3}</span>}
-        </>
-      ),
+    render: (c) => <PaymentLogos payments={c.payments} />,
   },
   gameCount: { label: "Games", render: (c) => c.gameCount && `${c.gameCount.toLocaleString("en")}+` },
   liveCasino: {

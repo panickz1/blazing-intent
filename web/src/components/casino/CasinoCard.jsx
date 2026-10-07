@@ -2,14 +2,12 @@ import Link from "next/link";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { site } from "@/site.config";
-import { BonusCell, ReviewButton, VisitButton } from "./parts";
+import { BonusCell, PaymentLogos, ReviewButton, VisitButton } from "./parts";
 import CasinoLogo from "./CasinoLogo";
 import Rating from "./Rating";
 
 export default function CasinoCard({ casino, badge }) {
   const { affiliate } = site;
-  const shown = casino.paymentMethods.slice(0, 3);
-  const extra = casino.paymentMethods.length - shown.length;
 
   return (
     <article
@@ -53,10 +51,7 @@ export default function CasinoCard({ casino, badge }) {
         {casino.paymentMethods.length > 0 && (
           <div className="hidden min-w-0 lg:block">
             <p className="m-0 text-[12px] text-fg-muted">{affiliate.paymentMethodsLabel}</p>
-            <p className="m-0 mt-1 truncate text-[13px] text-grey-100" title={casino.paymentMethods.join(", ")}>
-              {shown.join(", ")}
-              {extra > 0 && <span className="text-fg-muted"> +{extra}</span>}
-            </p>
+            <PaymentLogos payments={casino.payments} className="mt-1" />
           </div>
         )}
 

@@ -5,7 +5,8 @@ import Schema from "@/helpers/SEO/Schema";
 import { Markdown } from "@/components/Markdown";
 import CasinoListClient from "@/components/casino/CasinoListClient";
 import BonusTable from "@/components/bonus/BonusTable";
-import { getSection, getEditorialSlugs, getCatalogItem, getCatalogItems, getCatalogCasinoIds, getCatalogParams } from "@/lib/catalog";
+import AttributeChip from "@/components/catalog/AttributeChip";
+import { getSection, getEditorialSlugs, toAttribute, getCatalogItem, getCatalogItems, getCatalogCasinoIds, getCatalogParams } from "@/lib/catalog";
 import { getCasinoCards } from "@/lib/casinos";
 import { getBonusRows } from "@/lib/bonuses";
 import assetUrl from "@/helpers/functions/assetUrl";
@@ -56,7 +57,9 @@ export default async function CatalogPage({ params }) {
   if (!data) notFound();
   if (data.redirect) permanentRedirect(data.redirect);
   const { section, item, bonuses, casinos, isBonus, title, href } = data;
-  const siblings = (await getCatalogItems(section.collection)).filter((i) => i.id !== item.id);
+  const siblings = (await getCatalogItems(section.collection))
+    .filter((i) => i.id !== item.id)
+    .map((i) => ({ ...toAttribute(section.collection, i), href: `/${section.path}/${i.slug}` }));
 
   return (
     <>
@@ -124,12 +127,7 @@ export default async function CatalogPage({ params }) {
             <ul className="m-0 mt-4 flex list-none flex-wrap gap-2 p-0">
               {siblings.map((s) => (
                 <li key={s.id}>
-                  <Link
-                    href={`/${section.path}/${s.slug}`}
-                    className="inline-flex rounded-md border border-grey-700 bg-grey-950 px-3 py-1.5 text-[13.5px] font-semibold text-grey-100 transition-colors hover:border-grey-500 hover:text-white"
-                  >
-                    {s.name}
-                  </Link>
+                  <AttributeChip item={s} className="bg-grey-950 px-3 py-1.5 text-[13.5px]" />
                 </li>
               ))}
             </ul>
