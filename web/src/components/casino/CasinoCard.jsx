@@ -51,7 +51,7 @@ export default function CasinoCard({ casino, badge }) {
         {casino.paymentMethods.length > 0 && (
           <div className="hidden min-w-0 lg:block">
             <p className="m-0 text-[12px] text-fg-muted">{affiliate.paymentMethodsLabel}</p>
-            <PaymentLogos payments={casino.payments} className="mt-1" />
+            <PaymentLogos payments={casino.payments} moreHref={`${casino.reviewHref}#payment-methods`} className="mt-1" />
           </div>
         )}
 

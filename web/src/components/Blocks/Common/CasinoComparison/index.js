@@ -25,7 +25,7 @@ const COLUMNS = {
   withdrawalTime: { label: "Withdrawal time", render: (c) => c.withdrawalTime },
   paymentMethods: {
     label: "Payment methods",
-    render: (c) => <PaymentLogos payments={c.payments} />,
+    render: (c) => <PaymentLogos payments={c.payments} moreHref={`${c.reviewHref}#payment-methods`} />,
   },
   gameCount: { label: "Games", render: (c) => c.gameCount && `${c.gameCount.toLocaleString("en")}+` },
   liveCasino: {

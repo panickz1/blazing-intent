@@ -229,7 +229,7 @@ export default async function CasinoReview({ params }) {
         )}
 
         {card.payments.length > 0 && (
-          <section className="mt-8">
+          <section id="payment-methods" className="mt-8 scroll-mt-28">
             <h2 className="m-0 font-heading text-[22px] font-black text-white">{site.catalog.sections.payments.label}</h2>
             <PaymentTable payments={card.payments} />
           </section>
