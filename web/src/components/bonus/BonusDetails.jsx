@@ -13,12 +13,13 @@ function facts(bonus) {
     [l.columns.deposit, bonus.minDeposit],
     [l.freeSpins, bonus.freeSpins],
     [l.maxWin, bonus.maxWin],
+    [l.maxBet, bonus.maxBet],
     [l.minOdds, bonus.minOdds],
     [l.validUntil, bonus.validUntil && new Date(bonus.validUntil).toLocaleDateString(site.locale, { day: "numeric", month: "long", year: "numeric" })],
   ].filter(([, value]) => value);
 }
 
-export default function BonusDetails({ bonus, casino, showActions = true }) {
+export default function BonusDetails({ bonus, casino, showActions = true, showReview = true }) {
   const l = site.bonuses;
   const list = facts(bonus);
   return (
@@ -66,13 +67,15 @@ export default function BonusDetails({ bonus, casino, showActions = true }) {
               {site.affiliate.claimLabel}
               <ArrowRight className="size-4" aria-hidden />
             </a>
-            <Link
-              href={casino.reviewHref}
-              className="flex h-10 items-center justify-center rounded-md border border-grey-700 px-4 text-[14px] font-medium text-grey-100 transition-colors hover:border-grey-500 hover:text-white"
-            >
-              {site.affiliate.reviewLabel}
-              <span className="sr-only"> of {casino.name}</span>
-            </Link>
+            {showReview && (
+              <Link
+                href={casino.reviewHref}
+                className="flex h-10 items-center justify-center rounded-md border border-grey-700 px-4 text-[14px] font-medium text-grey-100 transition-colors hover:border-grey-500 hover:text-white"
+              >
+                {site.affiliate.reviewLabel}
+                <span className="sr-only"> of {casino.name}</span>
+              </Link>
+            )}
           </div>
         )}
       </div>

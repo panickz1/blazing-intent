@@ -48,6 +48,7 @@ src/app/(core)/[slug]/page.js ── getPageData() ── ContentRenderer ──
 | --- | --- | --- |
 | `casinoList` | CasinoList | Ranked casino cards with sorting, bonus cell, Visit and Review; `initialCount` hides the rest behind Show more but keeps every card in the HTML. `variant: compact` + `sortBy: newest` = a "new casinos" grid using each casino's launch date |
 | `bonusList` | BonusList | Bonus table from the `bonuses` collection: casino, type chips, wagering, minimum deposit, value, and an expandable How to claim / info panel per row. Optional bonus type filter, search, `initialCount`. `headingLevel: h1` when it is the page title |
+| `gameList` | GameList | Game grid (thumbnail, RTP, volatility) linking to each game page. Optional game type and provider, search, type/provider/volatility/bonus buy filters and sorting; every card stays in the HTML. `headingLevel: h1` when it is the page title |
 | `timeline` | Timeline | Dated entries, newest first, with Show more (all entries stay in the HTML). For regulation changes or market news |
 | `licenceRegister` | LicenceRegister | Every casino with licence number, status chip and review link, with search. Filter to active or inactive licences |
 | `logoStrip` | LogoStrip | "As seen in" strip from the `mediaMentions` collection; logos in grey, or the outlet name when no logo |
@@ -97,7 +98,7 @@ The Directus collection name is the key in `src/app/blocks.js`. If the names do 
 
 Casinos live in the Directus `casinos` collection and load through `src/lib/casinos` (cached, tag `casinos`).
 
-- `/review/<slug>` renders a review (`src/app/(core)/review/[slug]/page.js`). Change the path with `site.affiliate.reviewPath` and rename the route folder to match.
+- `/review/<slug>` renders a review (`src/app/(core)/review/[slug]/page.js`, parts in `src/components/review`). Above the fold: identity and licences, the first bonus, the score with its breakdown, key facts and payment methods. The review body follows with a sidebar spec sheet and table of contents built from the body's H2s. Labels live in `site.review`. Change the path with `site.affiliate.reviewPath` and rename the route folder to match.
 - `/go/<slug>` redirects to the casino's `affiliateUrl` (`src/app/(api)/go/[slug]/route.js`), unknown slugs fall back to `/casinos`. Every outbound link uses `rel="nofollow sponsored noopener"`.
 - Card UI: `src/components/casino/` (`CasinoCard`, `CasinoListClient` for sorting, `CasinoLogo`, `Rating`). Without a logo upload the card shows the name on the casino's brand colour.
 - The CMS M2M on the `casinoList` block decides which casinos show and in what order; leave it empty to list all published casinos by their `sort`.
@@ -110,6 +111,17 @@ Attribute collections (payment methods, providers, games, sports, licences, bonu
 - Thin pages are kept out of search: a page with no Markdown `body` and fewer than `site.catalog.minCasinosToIndex` casinos (or bonuses) gets `noindex` and is left out of the sitemap. Unticking `index` on the item does the same.
 - A CMS page with the same slug as a catalogue item wins: the catalogue page 301s to it. That is how `/bonuses/welcome-bonuses` hands over to the editorial `/welcome-bonuses` page.
 - Reviews show every attribute as a chip linking to its page, a payment methods table and every bonus.
+
+## Games
+
+Games live in the Directus `gameTitles` collection (imported with `yarn import-games` in `../cms`) and load through `src/lib/games` (cached, tag `gameTitles`).
+
+- `/games/<game type>/<slug>` renders a game page (`src/app/(core)/[slug]/[item]/[game]/page.js`): stats, features, the review body, casinos that carry the provider and similar games. It sits under the `games` catalogue section, so that section must be enabled.
+- The demo is click to play (`components/games/GameDemo`): the iframe only loads after a click, opens in a drawer under 640px and has a full screen button. Pragmatic demos take up to 30 seconds to load.
+- `site.games` in `src/site.config.js` holds the copy, the demo language and currency, the demo URL template per provider slug (`{symbol}`, `{lang}`, `{currency}`, `{lobbyUrl}`) and `jurisdictions`: only games certified in those markets are listed (empty lists all). Env overrides: `NEXT_PUBLIC_GAME_JURISDICTIONS`, `NEXT_PUBLIC_DEMO_LANGUAGE`, `NEXT_PUBLIC_DEMO_CURRENCY`.
+- Adding a provider: add its demo URL template to `site.games.demo.urls` and its demo host to `frame-src` in `next.config.js`.
+- Game type pages (`/games/slots`) and provider pages (`/providers/pragmatic-play`) list their games under the casinos.
+- `/games` is a CMS page built from the `gameList` block.
 
 ## Contact form
 

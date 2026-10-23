@@ -1,6 +1,7 @@
 import Hero from "@/components/Blocks/Common/Hero";
 import CasinoList from "@/components/Blocks/Common/CasinoList";
 import BonusList from "@/components/Blocks/Common/BonusList";
+import GameList from "@/components/Blocks/Common/GameList";
 import Team from "@/components/Blocks/Common/Team";
 import InfoSection from "@/components/Blocks/Common/InfoSection";
 import CasinoSpotlight from "@/components/Blocks/Common/CasinoSpotlight";
@@ -38,6 +39,7 @@ export const blocks = new Map([
   ["hero", Hero],
   ["casinoList", CasinoList],
   ["bonusList", BonusList],
+  ["gameList", GameList],
   ["landingTeam", Team],
   ["infoSection", InfoSection],
   ["casinoSpotlight", CasinoSpotlight],

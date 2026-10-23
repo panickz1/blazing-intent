@@ -11,12 +11,13 @@ Directus 11 with the flexible-editor extension. The schema lives in `snapshot.ya
 | `yarn start` | Starts Directus without touching the schema. |
 | `yarn snap` | Writes the current schema to `snapshot.yaml`. Commit it. |
 | `yarn setup` | Grants Public permissions, creates the revalidation flow (if configured) and seeds demo content into an empty database. |
+| `yarn import-games [file]` | Imports a provider game export (xlsx) into `gameTitles`. See [Games](#games). |
 
 `yarn setup` flags:
 
 - `--no-seed` only permissions and the flow. Use this on production.
 - `--force-seed` adds the demo content even when pages already exist.
-- `--demo-catalog` adds the demo attributes (payment methods, providers, games...), links them to the demo casinos, creates their bonuses and the `/welcome-bonuses` page. Only fills what is empty, so it is safe to rerun.
+- `--demo-catalog` adds the demo attributes (payment methods, providers, games...), links them to the demo casinos, creates their bonuses, the `/welcome-bonuses` page and the `/games` page (with Games in the main menu and a Favourite games footer column once games are imported). Only fills what is empty, so it is safe to rerun.
 - `--rebuild-homepage` replaces the homepage with the current demo homepage (the old one is kept as an archived page) and fills the demo casinos' newer fields. Use it after pulling a new starter version into an existing local install.
 
 It logs in with `ADMIN_EMAIL`/`ADMIN_PASSWORD`, or uses `SETUP_DIRECTUS_TOKEN` if set. Point it at another instance with `SETUP_DIRECTUS_URL`.
@@ -27,7 +28,7 @@ It also repairs any collection display template that points at a missing field. 
 
 | Policy | Access |
 | --- | --- |
-| Public | Read on pages, blog, help centre, menus, theme, footer, redirects and every block collection |
+| Public | Read on pages, blog, help centre, menus, theme, footer, redirects, game titles (without `sourceDescription`) and every block collection |
 | Public | Read on `directus_files` (safe fields) and `directus_users` (name, avatar, title, description, LinkedIn only) |
 | Public | Create on `leads` (form fields only, no read) |
 
@@ -35,10 +36,11 @@ It also repairs any collection display template that points at a missing field. 
 
 | Collection | Used for |
 | --- | --- |
-| `casinos` + `casinos_editor_node` | Operators (a suspended or revoked `licenceStatus` removes a casino from rankings, reviews and `/go/` links; it stays in the licence register): rating, highlights, licence number, affiliate URL, pros/cons, the review body (flexible editor), its bonuses and its attributes. Review at `/review/<slug>`, outbound link `/go/<slug>`. |
-| `bonuses` (Casinos > Bonus) | Every offer, with its casino (M2O), types, headline, amount, wagering, minimum deposit, code, how to claim, info and expiry. A casino's first bonus (drag to order on the casino) is the headline on cards. Expired bonuses (`validUntil`) drop out of lists. |
+| `casinos` + `casinos_editor_node` | Operators (a suspended or revoked `licenceStatus` removes a casino from rankings, reviews and `/go/` links; it stays in the licence register): rating, a one-line verdict, an optional score breakdown (bonus, payouts, games, support, mobile, safety; labels in `site.review.scores`), highlights, licence number, affiliate URL, pros/cons, the review body (flexible editor), its bonuses and its attributes. Review at `/review/<slug>`, outbound link `/go/<slug>`. |
+| `bonuses` (Casinos > Bonus) | Every offer, with its casino (M2O), types, headline, amount, wagering, minimum deposit, max bet, code, how to claim, info and expiry. A casino's first bonus (drag to order on the casino) is the headline on cards. Expired bonuses (`validUntil`) drop out of lists. |
 | `bonusTypes` (Casinos > Bonus) | Welcome, Free spins, No deposit, Cashback... M2M with bonuses. Page: `/bonuses/<slug>`. |
 | Attributes (Casinos > Attributes) | `paymentMethods`, `providers`, `games`, `sports`, `support`, `licences` (regulators), `regions`, `languages` (M2M with casinos through `casinos_<name>`) and `organizations` (M2O `casinos.organization`). Shared records: one logo or name change updates every review. All have the same base fields (name, slug, logo, description, Markdown body, SEO, index) so each can have its own page. `casinos_paymentMethods` also holds the casino's minimum deposit and withdrawal time for that method. |
+| `gameTitles` | Individual games: provider (M2O `providers`), game type (M2O `games`), symbol, thumbnail, RTP and RTP versions, volatility, grid, pay type, bets, max win, features, themes, mechanics and the markets it is certified in. Page at `/games/<game type>/<slug>` with the playable demo. `sourceDescription` holds the provider copy from the import and is never public. |
 | `mediaMentions` | Press coverage for the logo strip: name, logo, link. |
 | `marketStats` | One row per casino per month (e.g. searches). Feeds the `marketRanking` block, which shows the latest month and the change from the previous one. |
 | `authors` | Writers and reviewers (photo, role, bio, experience, expertise, favourite, tip, links). Shown by the `landingTeam` block; each has a slug for future author pages. |
@@ -68,3 +70,18 @@ Page templates: `landing` (full bleed, optional backlight glow), `article` (read
 - Railway Buckets are private. Directus reads them with the bucket credentials and serves files at `/assets/<id>`; the website loads them from there through `next/image`, which caches each size for a year. Leave `NEXT_PUBLIC_CDN_URL` empty. Use path style (`STORAGE_S3_FORCE_PATH_STYLE=true`) only if the bucket's Credentials tab says so.
 - With a public bucket or CDN in front of it, set `NEXT_PUBLIC_CDN_URL` on the site to its public URL instead.
 - Every file field needs its relation to `directus_files` (Directus creates it when you add an Image field in the admin). Without it the API returns only the id and the site cannot build the image URL.
+
+## Games
+
+`yarn import-games` reads a Pragmatic Play Client Hub export (Game Library > Download Games Data) and upserts every released game into `gameTitles`, keyed on the game symbol.
+
+```bash
+yarn import-games data/pragmatic-slots.xlsx --provider=pragmatic-play --type=slots
+```
+
+- Keep exports in `data/` (gitignored: the hub marks its data confidential).
+- `--provider` and `--type` are the slugs of the `providers` and `games` rows the games belong to. Defaults: `pragmatic-play`, `slots`.
+- New games are created published, with a thumbnail downloaded from the provider. Games with a future release date are skipped.
+- Rerunning only refreshes the stats, flags, markets and `sourceDescription`. Name, slug, description, review body, SEO fields and status are never overwritten, so editors' work is safe.
+- `--dry-run` parses and counts without writing; `--no-images` skips thumbnails.
+

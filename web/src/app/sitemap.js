@@ -6,6 +6,7 @@ import { getHelpData, hasPage } from "@/lib/help";
 import { getCasinos } from "@/lib/casinos";
 import { getSection, getEditorialSlugs, getCatalogItems, getCatalogCasinoIds } from "@/lib/catalog";
 import { getBonusRows } from "@/lib/bonuses";
+import { getGames, gameHref } from "@/lib/games";
 import { site } from "@/site.config";
 
 const iso = (...dates) => new Date(dates.find(Boolean) || Date.now()).toISOString();
@@ -24,7 +25,9 @@ async function getIndexablePages() {
   }
 }
 
-async function getCatalogUrls(activeIds) {
+const gameOwners = { games: "gameType", providers: "provider" };
+
+async function getCatalogUrls(activeIds, games) {
   const urls = [];
   const editorial = new Set(await getEditorialSlugs());
   for (const path of Object.keys(site.catalog.sections)) {
@@ -36,7 +39,9 @@ async function getCatalogUrls(activeIds) {
         section.collection === "bonusTypes"
           ? (await getBonusRows({ type: item.id })).length
           : (await getCatalogCasinoIds(section, item.id)).filter((id) => activeIds.has(id)).length;
-      if (!item.body?.trim() && count < site.catalog.minCasinosToIndex) continue;
+      const owner = gameOwners[section.collection];
+      const hasGames = owner && games.some((g) => g[owner]?.id === item.id);
+      if (!item.body?.trim() && count < site.catalog.minCasinosToIndex && !hasGames) continue;
       urls.push({ url: `${site.url}/${path}/${item.slug}`, lastModified: iso(item.date_updated), changeFrequency: "weekly", priority: 0.7 });
     }
   }
@@ -46,9 +51,9 @@ async function getCatalogUrls(activeIds) {
 export default async function sitemap() {
   "use cache";
   cacheLife({ stale: 300, revalidate: 3600, expire: 86400 });
-  cacheTag("pages", "categories", "articles", "help_articles", "help_categories", "casinos");
+  cacheTag("pages", "categories", "articles", "help_articles", "help_categories", "casinos", "gameTitles");
 
-  const [pages, blog, help, casinos] = await Promise.all([getIndexablePages(), getBlogData(), getHelpData(), getCasinos()]);
+  const [pages, blog, help, casinos, games] = await Promise.all([getIndexablePages(), getBlogData(), getHelpData(), getCasinos(), getGames()]);
 
   const urls = [{ url: site.url, lastModified: iso(), changeFrequency: "weekly", priority: 1 }];
 
@@ -72,7 +77,13 @@ export default async function sitemap() {
     });
   }
 
-  urls.push(...(await getCatalogUrls(new Set(casinos.map((c) => c.id)))));
+  urls.push(...(await getCatalogUrls(new Set(casinos.map((c) => c.id)), games)));
+
+  for (const game of games) {
+    const href = gameHref(game);
+    if (!href || game.index === false) continue;
+    urls.push({ url: `${site.url}${href}`, lastModified: iso(game.releaseDate), changeFrequency: "monthly", priority: 0.6 });
+  }
 
   for (const article of blog.articles) {
     const category = article.categories?.[0]?.categories_id;

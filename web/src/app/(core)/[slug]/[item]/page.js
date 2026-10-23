@@ -7,13 +7,21 @@ import { Markdown } from "@/components/Markdown";
 import CasinoListClient from "@/components/casino/CasinoListClient";
 import BonusTable from "@/components/bonus/BonusTable";
 import AttributeChip from "@/components/catalog/AttributeChip";
+import GameBrowser from "@/components/games/GameBrowser";
 import { getSection, getEditorialSlugs, toAttribute, getCatalogItem, getCatalogItems, getCatalogCasinoIds, getCatalogParams } from "@/lib/catalog";
 import { getCasinoCards } from "@/lib/casinos";
 import { getBonusRows } from "@/lib/bonuses";
+import { getGameCards, fill } from "@/lib/games";
 import assetUrl from "@/helpers/functions/assetUrl";
 import { site } from "@/site.config";
 
 export const generateStaticParams = getCatalogParams;
+
+function gamesFor(section, item) {
+  if (section.collection === "games") return getGameCards({ type: item.id });
+  if (section.collection === "providers") return getGameCards({ provider: item.id });
+  return [];
+}
 
 async function load(params) {
   const { slug, item: itemSlug } = await params;
@@ -21,18 +29,22 @@ async function load(params) {
   if (!section) return null;
   const item = await getCatalogItem(section.collection, itemSlug);
   if (!item) return null;
-  if ((await getEditorialSlugs()).includes(item.slug)) return { redirect: `/${item.slug}` };
+  const editorial = await getEditorialSlugs();
+  if (editorial.includes(item.slug)) return { redirect: `/${item.slug}` };
   const isBonus = section.collection === "bonusTypes";
   const bonuses = isBonus ? await getBonusRows({ type: item.id, sortBy: "recommended" }) : [];
   const casinos = isBonus ? [] : await getCasinoCards({ ids: await getCatalogCasinoIds(section, item.id) });
+  const games = await gamesFor(section, item);
   const count = isBonus ? bonuses.length : casinos.length;
-  const thin = !item.body?.trim() && count < site.catalog.minCasinosToIndex;
+  const thin = !item.body?.trim() && count < site.catalog.minCasinosToIndex && games.length === 0;
   return {
     section,
     item,
     bonuses,
     casinos,
+    games,
     isBonus,
+    sectionHref: editorial.includes(section.path) ? `/${section.path}` : undefined,
     title: section.title.replace("{name}", item.name),
     href: `/${section.path}/${item.slug}`,
     indexable: item.index !== false && !thin,
@@ -57,7 +69,7 @@ export default async function CatalogPage({ params }) {
   const data = await load(params);
   if (!data) notFound();
   if (data.redirect) permanentRedirect(data.redirect);
-  const { section, item, bonuses, casinos, isBonus, title, href } = data;
+  const { section, item, bonuses, casinos, games, isBonus, sectionHref, title, href } = data;
   const siblings = (await getCatalogItems(section.collection))
     .filter((i) => i.id !== item.id)
     .map((i) => ({ ...toAttribute(section.collection, i), href: `/${section.path}/${i.slug}` }));
@@ -69,7 +81,7 @@ export default async function CatalogPage({ params }) {
       )}
 
       <section className={`landing-container pb-6 ${PAGE_TOP}`}>
-        <Breadcrumbs items={[{ name: section.label }, { name: item.name, url: href }]} className="mb-5" />
+        <Breadcrumbs items={[{ name: section.label, url: sectionHref }, { name: item.name, url: href }]} className="mb-5" />
 
         <header className="flex max-w-[72ch] flex-col gap-4 sm:flex-row sm:gap-6">
           {item.logo?.filename_disk && (
@@ -102,6 +114,15 @@ export default async function CatalogPage({ params }) {
           <p className="m-0 rounded-xl border border-grey-800 bg-grey-900 p-6 text-[15px] text-fg-muted">{site.catalog.emptyLabel}</p>
         )}
       </section>
+
+      {games.length > 0 && (
+        <section className="landing-container pb-12">
+          <h2 className="m-0 mb-4 font-heading text-[22px] font-black text-white">
+            {fill(section.collection === "providers" ? site.games.providerHeading : site.games.listHeading, { type: item.name, provider: item.name })}
+          </h2>
+          <GameBrowser games={games} />
+        </section>
+      )}
 
       {item.body?.trim() && (
         <section className="landing-container pb-12">

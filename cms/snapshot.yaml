@@ -909,6 +909,56 @@ collections:
       versioning: false
     schema:
       name: footer
+  - collection: gameList
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: gameList
+      color: null
+      display_template: '{{title}}'
+      group: Blocks
+      hidden: true
+      icon: stadia_controller
+      item_duplication_fields: null
+      note: >-
+        Game grid with thumbnails, RTP and volatility, linking to each game
+        page. Optional search, type, provider and volatility filters.
+      preview_url: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+      versioning: false
+    schema:
+      name: gameList
+  - collection: gameTitles
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: status
+      archive_value: archived
+      collapse: open
+      collection: gameTitles
+      color: null
+      display_template: '{{name}}'
+      group: null
+      hidden: false
+      icon: stadia_controller
+      item_duplication_fields: null
+      note: 'Individual games with stats and demo. Page: /games/<game type>/<slug>.'
+      preview_url: null
+      singleton: false
+      sort: 2
+      sort_field: sort
+      translations: null
+      unarchive_value: draft
+      versioning: false
+    schema:
+      name: gameTitles
   - collection: games
     meta:
       accountability: all
@@ -6013,7 +6063,7 @@ fields:
       options: null
       readonly: true
       required: false
-      sort: 4
+      sort: 5
       special:
         - date-created
       translations: null
@@ -6053,7 +6103,7 @@ fields:
       options: null
       readonly: true
       required: false
-      sort: 5
+      sort: 7
       special:
         - date-updated
       translations: null
@@ -6095,7 +6145,7 @@ fields:
         template: '{{name}}'
       readonly: false
       required: true
-      sort: 3
+      sort: 4
       special:
         - m2o
       translations: null
@@ -6135,7 +6185,7 @@ fields:
       options: null
       readonly: false
       required: true
-      sort: 4
+      sort: 6
       special: null
       translations: null
       validation: null
@@ -6174,7 +6224,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 5
+      sort: 8
       special: null
       translations: null
       validation: null
@@ -6213,7 +6263,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 6
+      sort: 9
       special: null
       translations: null
       validation: null
@@ -6252,7 +6302,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 7
+      sort: 10
       special: null
       translations: null
       validation: null
@@ -6291,7 +6341,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 8
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -6330,7 +6380,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 9
+      sort: 13
       special: null
       translations: null
       validation: null
@@ -6369,7 +6419,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 10
+      sort: 14
       special: null
       translations: null
       validation: null
@@ -6408,7 +6458,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 11
+      sort: 15
       special: null
       translations: null
       validation: null
@@ -6447,7 +6497,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 12
+      sort: 16
       special: null
       translations: null
       validation: null
@@ -6486,7 +6536,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 13
+      sort: 17
       special: null
       translations: null
       validation: null
@@ -6525,7 +6575,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 14
+      sort: 19
       special: null
       translations: null
       validation: null
@@ -6564,7 +6614,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 15
+      sort: 20
       special: null
       translations: null
       validation: null
@@ -6613,7 +6663,7 @@ fields:
         template: '{{text}}'
       readonly: false
       required: false
-      sort: 16
+      sort: 21
       special:
         - cast-json
       translations: null
@@ -6653,7 +6703,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 17
+      sort: 22
       special: null
       translations: null
       validation: null
@@ -6692,7 +6742,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 18
+      sort: 23
       special: null
       translations: null
       validation: null
@@ -6734,13 +6784,52 @@ fields:
         template: '{{bonusTypes_id.name}}'
       readonly: false
       required: false
-      sort: 7
+      sort: 11
       special:
         - m2m
       translations: null
       validation: null
       validation_message: null
       width: full
+  - collection: bonuses
+    field: maxBet
+    type: string
+    meta:
+      collection: bonuses
+      conditions: null
+      display: null
+      display_options: null
+      field: maxBet
+      group: null
+      hidden: false
+      interface: input
+      note: Maximum bet while wagering, e.g. €5.
+      options: null
+      readonly: false
+      required: false
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: maxBet
+      table: bonuses
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: bonuses_bonusTypes
     field: id
     type: integer
@@ -8829,7 +8918,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 10
+      sort: 12
       special: null
       translations: null
       validation: null
@@ -8878,7 +8967,7 @@ fields:
         template: '{{text}}'
       readonly: false
       required: false
-      sort: 15
+      sort: 14
       special:
         - cast-json
       translations: null
@@ -8918,7 +9007,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 17
+      sort: 15
       special: null
       translations: null
       validation: null
@@ -8957,7 +9046,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 18
+      sort: 17
       special: null
       translations: null
       validation: null
@@ -8996,7 +9085,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 19
+      sort: 18
       special: null
       translations: null
       validation: null
@@ -9035,7 +9124,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 20
+      sort: 19
       special: null
       translations: null
       validation: null
@@ -9074,7 +9163,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 21
+      sort: 20
       special: null
       translations: null
       validation: null
@@ -9115,7 +9204,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 22
+      sort: 21
       special: null
       translations: null
       validation: null
@@ -9164,7 +9253,7 @@ fields:
         template: '{{text}}'
       readonly: false
       required: false
-      sort: 23
+      sort: 22
       special:
         - cast-json
       translations: null
@@ -9214,7 +9303,7 @@ fields:
         template: '{{text}}'
       readonly: false
       required: false
-      sort: 24
+      sort: 23
       special:
         - cast-json
       translations: null
@@ -9254,7 +9343,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 25
+      sort: 24
       special: null
       translations: null
       validation: null
@@ -9293,7 +9382,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 26
+      sort: 25
       special:
         - cast-boolean
       translations: null
@@ -9333,7 +9422,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 27
+      sort: 26
       special: null
       translations: null
       validation: null
@@ -9372,7 +9461,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 28
+      sort: 27
       special:
         - file
       translations: null
@@ -9412,7 +9501,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 29
+      sort: 28
       special:
         - m2a
       translations: null
@@ -9437,7 +9526,7 @@ fields:
         toolbarMode: floating
       readonly: false
       required: false
-      sort: 30
+      sort: 29
       special:
         - cast-json
       translations: null
@@ -9477,7 +9566,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 32
+      sort: 30
       special: null
       translations: null
       validation: null
@@ -9516,7 +9605,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 33
+      sort: 31
       special:
         - cast-boolean
       translations: null
@@ -9558,7 +9647,7 @@ fields:
       options: null
       readonly: false
       required: false
-      sort: 34
+      sort: 32
       special: null
       translations: null
       validation: null
@@ -9608,7 +9697,7 @@ fields:
             value: revoked
       readonly: false
       required: false
-      sort: 35
+      sort: 33
       special: null
       translations: null
       validation: null
@@ -9649,7 +9738,7 @@ fields:
         start: open
       readonly: false
       required: false
-      sort: 17
+      sort: 16
       special:
         - alias
         - no-data
@@ -9933,13 +10022,315 @@ fields:
         template: '{{headline}} {{name}}'
       readonly: false
       required: false
-      sort: 11
+      sort: 13
       special:
         - o2m
       translations: null
       validation: null
       validation_message: null
       width: full
+  - collection: casinos
+    field: verdict
+    type: text
+    meta:
+      collection: casinos
+      conditions: null
+      display: null
+      display_options: null
+      field: verdict
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: One or two sentences shown next to the score at the top of the review.
+      options: null
+      readonly: false
+      required: false
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: verdict
+      table: casinos
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: casinos
+    field: scores
+    type: alias
+    meta:
+      collection: casinos
+      conditions: null
+      display: null
+      display_options: null
+      field: scores
+      group: null
+      hidden: false
+      interface: group-detail
+      note: >-
+        Optional, 0 to 5 each. Shown as bars next to the rating; empty ones are
+        hidden.
+      options:
+        headerIcon: leaderboard
+        start: closed
+      readonly: false
+      required: false
+      sort: 11
+      special:
+        - alias
+        - no-data
+        - group
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: casinos
+    field: scoreBonus
+    type: decimal
+    meta:
+      collection: casinos
+      conditions: null
+      display: null
+      display_options: null
+      field: scoreBonus
+      group: scores
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: scoreBonus
+      table: casinos
+      data_type: numeric
+      default_value: null
+      max_length: null
+      numeric_precision: 3
+      numeric_scale: 1
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: casinos
+    field: scorePayouts
+    type: decimal
+    meta:
+      collection: casinos
+      conditions: null
+      display: null
+      display_options: null
+      field: scorePayouts
+      group: scores
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: scorePayouts
+      table: casinos
+      data_type: numeric
+      default_value: null
+      max_length: null
+      numeric_precision: 3
+      numeric_scale: 1
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: casinos
+    field: scoreGames
+    type: decimal
+    meta:
+      collection: casinos
+      conditions: null
+      display: null
+      display_options: null
+      field: scoreGames
+      group: scores
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: scoreGames
+      table: casinos
+      data_type: numeric
+      default_value: null
+      max_length: null
+      numeric_precision: 3
+      numeric_scale: 1
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: casinos
+    field: scoreSupport
+    type: decimal
+    meta:
+      collection: casinos
+      conditions: null
+      display: null
+      display_options: null
+      field: scoreSupport
+      group: scores
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: scoreSupport
+      table: casinos
+      data_type: numeric
+      default_value: null
+      max_length: null
+      numeric_precision: 3
+      numeric_scale: 1
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: casinos
+    field: scoreMobile
+    type: decimal
+    meta:
+      collection: casinos
+      conditions: null
+      display: null
+      display_options: null
+      field: scoreMobile
+      group: scores
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 5
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: scoreMobile
+      table: casinos
+      data_type: numeric
+      default_value: null
+      max_length: null
+      numeric_precision: 3
+      numeric_scale: 1
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: casinos
+    field: scoreSafety
+    type: decimal
+    meta:
+      collection: casinos
+      conditions: null
+      display: null
+      display_options: null
+      field: scoreSafety
+      group: scores
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 6
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: scoreSafety
+      table: casinos
+      data_type: numeric
+      default_value: null
+      max_length: null
+      numeric_precision: 3
+      numeric_scale: 1
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
   - collection: casinos_editor_node
     field: id
     type: uuid
@@ -12517,6 +12908,2404 @@ fields:
     schema:
       name: disclaimer
       table: footer
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameList
+    field: id
+    type: integer
+    meta:
+      collection: gameList
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: gameList
+      data_type: integer
+      default_value: nextval('"gameList_id_seq"'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameList
+    field: headingLevel
+    type: string
+    meta:
+      collection: gameList
+      conditions: null
+      display: null
+      display_options: null
+      field: headingLevel
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: h1 when this block is the page title.
+      options:
+        choices:
+          - text: h1
+            value: h1
+          - text: h2
+            value: h2
+      readonly: false
+      required: false
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: headingLevel
+      table: gameList
+      data_type: character varying
+      default_value: h2
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameList
+    field: eyebrow
+    type: string
+    meta:
+      collection: gameList
+      conditions: null
+      display: null
+      display_options: null
+      field: eyebrow
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: eyebrow
+      table: gameList
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameList
+    field: title
+    type: string
+    meta:
+      collection: gameList
+      conditions: null
+      display: null
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: title
+      table: gameList
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameList
+    field: titleAccent
+    type: string
+    meta:
+      collection: gameList
+      conditions: null
+      display: null
+      display_options: null
+      field: titleAccent
+      group: null
+      hidden: false
+      interface: input
+      note: Second line in the brand colour.
+      options: null
+      readonly: false
+      required: false
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: titleAccent
+      table: gameList
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameList
+    field: description
+    type: text
+    meta:
+      collection: gameList
+      conditions: null
+      display: null
+      display_options: null
+      field: description
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 5
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: description
+      table: gameList
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameList
+    field: gameType
+    type: integer
+    meta:
+      collection: gameList
+      conditions: null
+      display: null
+      display_options: null
+      field: gameType
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: Only games of this type. Empty lists every type.
+      options:
+        template: '{{name}}'
+      readonly: false
+      required: false
+      sort: 6
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: gameType
+      table: gameList
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: games
+      foreign_key_column: id
+  - collection: gameList
+    field: provider
+    type: integer
+    meta:
+      collection: gameList
+      conditions: null
+      display: null
+      display_options: null
+      field: provider
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: Only games by this provider. Empty lists every provider.
+      options:
+        template: '{{name}}'
+      readonly: false
+      required: false
+      sort: 7
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: provider
+      table: gameList
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: providers
+      foreign_key_column: id
+  - collection: gameList
+    field: sortBy
+    type: string
+    meta:
+      collection: gameList
+      conditions: null
+      display: null
+      display_options: null
+      field: sortBy
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Newest first
+            value: newest
+          - text: Highest RTP
+            value: rtp
+          - text: Biggest max win
+            value: maxWin
+          - text: A to Z
+            value: name
+      readonly: false
+      required: false
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: sortBy
+      table: gameList
+      data_type: character varying
+      default_value: newest
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameList
+    field: showFilters
+    type: boolean
+    meta:
+      collection: gameList
+      conditions: null
+      display: null
+      display_options: null
+      field: showFilters
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Search, filters and sorting
+      readonly: false
+      required: false
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: showFilters
+      table: gameList
+      data_type: boolean
+      default_value: true
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameList
+    field: initialCount
+    type: integer
+    meta:
+      collection: gameList
+      conditions: null
+      display: null
+      display_options: null
+      field: initialCount
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Games shown before Show more. All games stay in the HTML. Empty uses the
+        site default.
+      options: null
+      readonly: false
+      required: false
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: initialCount
+      table: gameList
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameList
+    field: limit
+    type: integer
+    meta:
+      collection: gameList
+      conditions: null
+      display: null
+      display_options: null
+      field: limit
+      group: null
+      hidden: false
+      interface: input
+      note: Empty lists every matching game.
+      options: null
+      readonly: false
+      required: false
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: limit
+      table: gameList
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: id
+    type: integer
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: gameTitles
+      data_type: integer
+      default_value: nextval('"gameTitles_id_seq"'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_indexed: false
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: status
+    type: string
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: labels
+      display_options:
+        choices:
+          - background: var(--theme--primary)
+            foreground: '#FFFFFF'
+            text: Published
+            value: published
+          - background: '#D3DAE4'
+            foreground: '#18222F'
+            text: Draft
+            value: draft
+          - background: var(--theme--warning)
+            foreground: '#FFFFFF'
+            text: Archived
+            value: archived
+        showAsDot: true
+      field: status
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Published
+            value: published
+          - text: Draft
+            value: draft
+          - text: Archived
+            value: archived
+      readonly: false
+      required: false
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: status
+      table: gameTitles
+      data_type: character varying
+      default_value: draft
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: sort
+    type: integer
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: sort
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 3
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sort
+      table: gameTitles
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: date_created
+    type: timestamp
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: 4
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: date_created
+      table: gameTitles
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: 5
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: date_updated
+      table: gameTitles
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: name
+    type: string
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: name
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: true
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: name
+      table: gameTitles
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: slug
+    type: string
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: slug
+      group: null
+      hidden: false
+      interface: input
+      note: URL of its page, /games/<game type>/<slug>. Lowercase, hyphens only.
+      options: null
+      readonly: false
+      required: true
+      sort: 3
+      special: null
+      translations: null
+      validation:
+        _and:
+          - slug:
+              _regex: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      validation_message: Lowercase letters, numbers and hyphens only.
+      width: half
+    schema:
+      name: slug
+      table: gameTitles
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: true
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: provider
+    type: integer
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: related-values
+      display_options:
+        template: '{{name}}'
+      field: provider
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        template: '{{name}}'
+      readonly: false
+      required: true
+      sort: 4
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: provider
+      table: gameTitles
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: providers
+      foreign_key_column: id
+  - collection: gameTitles
+    field: gameType
+    type: integer
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: related-values
+      display_options:
+        template: '{{name}}'
+      field: gameType
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: Slots, Crash games... The page lives under this type.
+      options:
+        template: '{{name}}'
+      readonly: false
+      required: true
+      sort: 5
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: gameType
+      table: gameTitles
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: games
+      foreign_key_column: id
+  - collection: gameTitles
+    field: symbol
+    type: string
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: symbol
+      group: null
+      hidden: false
+      interface: input
+      note: >-
+        Provider game code, e.g. vs20olympgate. Loads the demo and is the import
+        key.
+      options: null
+      readonly: false
+      required: false
+      sort: 6
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: symbol
+      table: gameTitles
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: true
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: numericId
+    type: string
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: numericId
+      group: null
+      hidden: false
+      interface: input
+      note: Provider numeric ID.
+      options: null
+      readonly: false
+      required: false
+      sort: 7
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: numericId
+      table: gameTitles
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: thumbnail
+    type: uuid
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: image
+      display_options: null
+      field: thumbnail
+      group: null
+      hidden: false
+      interface: file-image
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 8
+      special:
+        - file
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: thumbnail
+      table: gameTitles
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
+  - collection: gameTitles
+    field: releaseDate
+    type: date
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: releaseDate
+      group: null
+      hidden: false
+      interface: datetime
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: releaseDate
+      table: gameTitles
+      data_type: date
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: demo
+    type: boolean
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: boolean
+      display_options: null
+      field: demo
+      group: null
+      hidden: false
+      interface: boolean
+      note: Untick for games without a demo, like live casino.
+      options:
+        label: Show the playable demo
+      readonly: false
+      required: false
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: demo
+      table: gameTitles
+      data_type: boolean
+      default_value: true
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: countryExclusive
+    type: boolean
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: boolean
+      display_options: null
+      field: countryExclusive
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Made for one market only
+      readonly: false
+      required: false
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: countryExclusive
+      table: gameTitles
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: statsDivider
+    type: alias
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: statsDivider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        icon: query_stats
+        title: Game stats
+      readonly: false
+      required: false
+      sort: 12
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: gameTitles
+    field: rtp
+    type: decimal
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: rtp
+      group: null
+      hidden: false
+      interface: input
+      note: Highest RTP, in %. e.g. 96.50
+      options: null
+      readonly: false
+      required: false
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: rtp
+      table: gameTitles
+      data_type: numeric
+      default_value: null
+      max_length: null
+      numeric_precision: 5
+      numeric_scale: 2
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: rtpVariants
+    type: csv
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: labels
+      display_options: null
+      field: rtpVariants
+      group: null
+      hidden: false
+      interface: tags
+      note: Every RTP version the provider offers, e.g. 96.50, 95.50, 94.50.
+      options: null
+      readonly: false
+      required: false
+      sort: 14
+      special:
+        - cast-csv
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: rtpVariants
+      table: gameTitles
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: volatility
+    type: string
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: labels
+      display_options:
+        choices:
+          - text: Low
+            value: low
+          - text: Medium
+            value: medium
+          - text: High
+            value: high
+      field: volatility
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Low
+            value: low
+          - text: Medium
+            value: medium
+          - text: High
+            value: high
+      readonly: false
+      required: false
+      sort: 15
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: volatility
+      table: gameTitles
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: payType
+    type: string
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: labels
+      display_options:
+        choices:
+          - text: Lines
+            value: lines
+          - text: Ways
+            value: ways
+          - text: Megaways
+            value: megaways
+          - text: Cluster pays
+            value: cluster
+          - text: Pay anywhere
+            value: anywhere
+      field: payType
+      group: null
+      hidden: false
+      interface: select-dropdown
+      note: null
+      options:
+        choices:
+          - text: Lines
+            value: lines
+          - text: Ways
+            value: ways
+          - text: Megaways
+            value: megaways
+          - text: Cluster pays
+            value: cluster
+          - text: Pay anywhere
+            value: anywhere
+      readonly: false
+      required: false
+      sort: 16
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: payType
+      table: gameTitles
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: reels
+    type: integer
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: reels
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 17
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: reels
+      table: gameTitles
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: rows
+    type: integer
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: rows
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 18
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: rows
+      table: gameTitles
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: paylines
+    type: integer
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: paylines
+      group: null
+      hidden: false
+      interface: input
+      note: Number of lines, or max ways.
+      options: null
+      readonly: false
+      required: false
+      sort: 19
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: paylines
+      table: gameTitles
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: symbolPays
+    type: string
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: symbolPays
+      group: null
+      hidden: false
+      interface: input
+      note: 'Cluster and pay anywhere games: symbols needed to win, e.g. 8+.'
+      options: null
+      readonly: false
+      required: false
+      sort: 20
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: symbolPays
+      table: gameTitles
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: minBet
+    type: decimal
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: minBet
+      group: null
+      hidden: false
+      interface: input
+      note: Minimum total bet.
+      options: null
+      readonly: false
+      required: false
+      sort: 21
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: minBet
+      table: gameTitles
+      data_type: numeric
+      default_value: null
+      max_length: null
+      numeric_precision: 10
+      numeric_scale: 2
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: maxBet
+    type: decimal
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: maxBet
+      group: null
+      hidden: false
+      interface: input
+      note: Maximum total bet.
+      options: null
+      readonly: false
+      required: false
+      sort: 22
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: maxBet
+      table: gameTitles
+      data_type: numeric
+      default_value: null
+      max_length: null
+      numeric_precision: 10
+      numeric_scale: 2
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: defaultBet
+    type: decimal
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: defaultBet
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 23
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: defaultBet
+      table: gameTitles
+      data_type: numeric
+      default_value: null
+      max_length: null
+      numeric_precision: 10
+      numeric_scale: 2
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: maxBetAnte
+    type: decimal
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: maxBetAnte
+      group: null
+      hidden: false
+      interface: input
+      note: Maximum total bet with ante bet on.
+      options: null
+      readonly: false
+      required: false
+      sort: 24
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: maxBetAnte
+      table: gameTitles
+      data_type: numeric
+      default_value: null
+      max_length: null
+      numeric_precision: 10
+      numeric_scale: 2
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: maxWin
+    type: integer
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: maxWin
+      group: null
+      hidden: false
+      interface: input
+      note: Max win as a multiple of the bet, e.g. 5000 for 5,000x.
+      options: null
+      readonly: false
+      required: false
+      sort: 25
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: maxWin
+      table: gameTitles
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: featuresDivider
+    type: alias
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: featuresDivider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        icon: auto_awesome
+        title: Features
+      readonly: false
+      required: false
+      sort: 26
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: gameTitles
+    field: hasBuyFeature
+    type: boolean
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: boolean
+      display_options: null
+      field: hasBuyFeature
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Bonus buy
+      readonly: false
+      required: false
+      sort: 27
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: hasBuyFeature
+      table: gameTitles
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: maxBonusBuy
+    type: decimal
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: maxBonusBuy
+      group: null
+      hidden: false
+      interface: input
+      note: Highest bonus buy price, as a multiple of the bet.
+      options: null
+      readonly: false
+      required: false
+      sort: 28
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: maxBonusBuy
+      table: gameTitles
+      data_type: numeric
+      default_value: null
+      max_length: null
+      numeric_precision: 10
+      numeric_scale: 2
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: hasAnteBet
+    type: boolean
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: boolean
+      display_options: null
+      field: hasAnteBet
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Ante bet
+      readonly: false
+      required: false
+      sort: 29
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: hasAnteBet
+      table: gameTitles
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: hasInstantBonus
+    type: boolean
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: boolean
+      display_options: null
+      field: hasInstantBonus
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Instant bonus
+      readonly: false
+      required: false
+      sort: 30
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: hasInstantBonus
+      table: gameTitles
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: hasReplay
+    type: boolean
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: boolean
+      display_options: null
+      field: hasReplay
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Replay
+      readonly: false
+      required: false
+      sort: 31
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: hasReplay
+      table: gameTitles
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: isJackpot
+    type: boolean
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: boolean
+      display_options: null
+      field: isJackpot
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Jackpot game
+      readonly: false
+      required: false
+      sort: 32
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: isJackpot
+      table: gameTitles
+      data_type: boolean
+      default_value: false
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: jackpot
+    type: string
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: jackpot
+      group: null
+      hidden: false
+      interface: input
+      note: Jackpot type, e.g. Fixed Jackpot.
+      options: null
+      readonly: false
+      required: false
+      sort: 33
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: jackpot
+      table: gameTitles
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: themes
+    type: csv
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: labels
+      display_options: null
+      field: themes
+      group: null
+      hidden: false
+      interface: tags
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 34
+      special:
+        - cast-csv
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: themes
+      table: gameTitles
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: mechanics
+    type: csv
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: labels
+      display_options: null
+      field: mechanics
+      group: null
+      hidden: false
+      interface: tags
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 35
+      special:
+        - cast-csv
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: mechanics
+      table: gameTitles
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: jurisdictions
+    type: csv
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: labels
+      display_options: null
+      field: jurisdictions
+      group: null
+      hidden: false
+      interface: tags
+      note: >-
+        Markets the game is certified in. The site only lists games certified in
+        its own markets.
+      options: null
+      readonly: false
+      required: false
+      sort: 36
+      special:
+        - cast-csv
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: jurisdictions
+      table: gameTitles
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: contentDivider
+    type: alias
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: contentDivider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        icon: edit_note
+        title: Content
+      readonly: false
+      required: false
+      sort: 37
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: gameTitles
+    field: description
+    type: text
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: description
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: >-
+        Short intro under the title. Leave empty to use one built from the
+        stats.
+      options: null
+      readonly: false
+      required: false
+      sort: 38
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: description
+      table: gameTitles
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: body
+    type: text
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: body
+      group: null
+      hidden: false
+      interface: input-rich-text-md
+      note: Review in Markdown.
+      options: null
+      readonly: false
+      required: false
+      sort: 39
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: body
+      table: gameTitles
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: sourceDescription
+    type: text
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: sourceDescription
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: >-
+        Provider copy from the import. Never shown on the site: use it as a
+        source for your own text.
+      options: null
+      readonly: false
+      required: false
+      sort: 40
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: sourceDescription
+      table: gameTitles
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: seoDivider
+    type: alias
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: seoDivider
+      group: null
+      hidden: false
+      interface: presentation-divider
+      note: null
+      options:
+        icon: travel_explore
+        title: SEO
+      readonly: false
+      required: false
+      sort: 41
+      special:
+        - alias
+        - no-data
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: gameTitles
+    field: metatitle
+    type: string
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: metatitle
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 42
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: metatitle
+      table: gameTitles
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: index
+    type: boolean
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: boolean
+      display_options: null
+      field: index
+      group: null
+      hidden: false
+      interface: boolean
+      note: null
+      options:
+        label: Let search engines index this page
+      readonly: false
+      required: false
+      sort: 43
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: index
+      table: gameTitles
+      data_type: boolean
+      default_value: true
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_indexed: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: gameTitles
+    field: metadescription
+    type: text
+    meta:
+      collection: gameTitles
+      conditions: null
+      display: null
+      display_options: null
+      field: metadescription
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 44
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: metadescription
+      table: gameTitles
       data_type: text
       default_value: null
       max_length: null
@@ -28945,6 +31734,7 @@ relations:
         - timeline
         - licenceRegister
         - logoStrip
+        - gameList
       one_collection: null
       one_collection_field: collection
       one_deselect_action: nullify
@@ -29771,6 +32561,111 @@ relations:
       constraint_name: featuregrid_user_updated_foreign
       on_update: NO ACTION
       on_delete: NO ACTION
+  - collection: gameList
+    field: gameType
+    related_collection: games
+    meta:
+      junction_field: null
+      many_collection: gameList
+      many_field: gameType
+      one_allowed_collections: null
+      one_collection: games
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: gameList
+      column: gameType
+      foreign_key_table: games
+      foreign_key_column: id
+      constraint_name: gamelist_gametype_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: gameList
+    field: provider
+    related_collection: providers
+    meta:
+      junction_field: null
+      many_collection: gameList
+      many_field: provider
+      one_allowed_collections: null
+      one_collection: providers
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: gameList
+      column: provider
+      foreign_key_table: providers
+      foreign_key_column: id
+      constraint_name: gamelist_provider_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: gameTitles
+    field: provider
+    related_collection: providers
+    meta:
+      junction_field: null
+      many_collection: gameTitles
+      many_field: provider
+      one_allowed_collections: null
+      one_collection: providers
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: gameTitles
+      column: provider
+      foreign_key_table: providers
+      foreign_key_column: id
+      constraint_name: gametitles_provider_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: gameTitles
+    field: gameType
+    related_collection: games
+    meta:
+      junction_field: null
+      many_collection: gameTitles
+      many_field: gameType
+      one_allowed_collections: null
+      one_collection: games
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: gameTitles
+      column: gameType
+      foreign_key_table: games
+      foreign_key_column: id
+      constraint_name: gametitles_gametype_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: gameTitles
+    field: thumbnail
+    related_collection: directus_files
+    meta:
+      junction_field: null
+      many_collection: gameTitles
+      many_field: thumbnail
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: gameTitles
+      column: thumbnail
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: gametitles_thumbnail_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
   - collection: games
     field: logo
     related_collection: directus_files
@@ -30273,6 +33168,7 @@ relations:
         - licenceRegister
         - logoStrip
         - bonusList
+        - gameList
       one_collection: null
       one_collection_field: collection
       one_deselect_action: nullify

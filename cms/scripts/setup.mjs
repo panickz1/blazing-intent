@@ -12,13 +12,16 @@ const CONTENT_COLLECTIONS = [
   "articles", "articles_editor_node", "articles_categories", "categories",
   "help_articles", "help_articles_editor_node", "help_articles_related", "help_categories",
   "menus", "theme", "footer", "redirects",
+  "gameTitles",
 ];
+
+const PRIVATE_FIELDS = { gameTitles: ["sourceDescription"] };
 
 const BLOCK_COLLECTIONS = [
   "casinoList", "casinoList_casinos", "casinoSpotlight", "casinoSpotlight_casinos", "casinoComparison", "casinoComparison_casinos", "bonusList", "infoSection", "topicCards", "marketRanking", "timeline", "licenceRegister", "logoStrip", "landingTeam", "landingTeam_authors", "hero", "landingPageHeader", "landingFeatureCards", "featureGrid", "landingSteps", "landingManifesto",
   "landingQuestions", "statementBand", "testimonial", "landingTestimonials", "landingProse", "landingPageCta",
   "landingFinalCta", "FAQ", "blogList", "blogList_categories", "landingHelpCenter", "landingHelpContact",
-  "helpCallout", "helpChecklist", "heading", "image", "quote", "steps", "proCon",
+  "helpCallout", "helpChecklist", "heading", "image", "quote", "steps", "proCon", "gameList",
 ];
 
 const LEAD_FIELDS = ["name", "email", "company", "topic", "message", "answers", "attribution", "source"];
@@ -71,9 +74,16 @@ async function grant(policy, collection, action, fields = ["*"]) {
   }
 }
 
+async function publicFields(collection) {
+  const hidden = PRIVATE_FIELDS[collection];
+  if (!hidden) return ["*"];
+  const fields = await api("GET", `/fields/${collection}`);
+  return fields.map((f) => f.field).filter((f) => !hidden.includes(f));
+}
+
 async function grantPublicPermissions() {
   const policy = await publicPolicyId();
-  for (const c of [...CONTENT_COLLECTIONS, ...BLOCK_COLLECTIONS]) await grant(policy, c, "read");
+  for (const c of [...CONTENT_COLLECTIONS, ...BLOCK_COLLECTIONS]) await grant(policy, c, "read", await publicFields(c));
   await grant(policy, "directus_files", "read", FILE_FIELDS);
   await grant(policy, "directus_users", "read", AUTHOR_FIELDS);
   await grant(policy, "leads", "create", LEAD_FIELDS);
@@ -213,15 +223,25 @@ const CASINOS = [
     pros: ["Try it without depositing"], cons: ["No-deposit winnings capped at €100"] },
 ];
 
+const scores = (scoreBonus, scorePayouts, scoreGames, scoreSupport, scoreMobile, scoreSafety) => ({ scoreBonus, scorePayouts, scoreGames, scoreSupport, scoreMobile, scoreSafety });
+
 const CASINO_EXTRAS = {
-  "royal-harbor": { gameCount: 2800, liveCasino: true },
-  "lucky-ember": { gameCount: 4200, liveCasino: true },
-  novaspin: { gameCount: 1900, liveCasino: false },
-  "golden-fjord": { gameCount: 3100, liveCasino: true },
-  "velvet-ace": { gameCount: 1200, liveCasino: true },
-  "starlight-slots": { gameCount: 3600, liveCasino: false },
-  bluefin: { gameCount: 1500, liveCasino: true },
-  "crown-and-clover": { gameCount: 1100, liveCasino: false },
+  "royal-harbor": { gameCount: 2800, liveCasino: true, ...scores(4.8, 5, 4.7, 4.4, 4.6, 5),
+    verdict: "One of the fastest payers we have tested, with a fair welcome bonus and a huge live casino. Skip it if you want sports betting." },
+  "lucky-ember": { gameCount: 4200, liveCasino: true, ...scores(4.5, 4.4, 4.9, 4.6, 4.7, 4.9),
+    verdict: "A slot lover's casino with weekly cashback you keep in cash. The welcome bonus takes three deposits to unlock in full." },
+  novaspin: { gameCount: 1900, liveCasino: false, ...scores(4.9, 4.9, 4.2, 4.3, 4.6, 4.5),
+    verdict: "No-wagering free spins and same-day withdrawals make it the strongest newcomer. Table game fans will find less to play." },
+  "golden-fjord": { gameCount: 3100, liveCasino: true, ...scores(4.6, 3.9, 4.5, 4.7, 4.3, 4.8),
+    verdict: "Built for high rollers, with big limits and a real VIP programme. Casual players will find the 35x wagering steep." },
+  "velvet-ace": { gameCount: 1200, liveCasino: true, ...scores(4.6, 4.2, 4.1, 4.8, 4.2, 4.6),
+    verdict: "Low 20x wagering and excellent blackjack and roulette tables. The welcome bonus is on the small side." },
+  "starlight-slots": { gameCount: 3600, liveCasino: false, ...scores(4.4, 4.1, 4.6, 3.9, 4.4, 4.4),
+    verdict: "A deep jackpot lobby and loyalty points that turn into cash. Support goes quiet overnight." },
+  bluefin: { gameCount: 1500, liveCasino: true, ...scores(3.9, 3.8, 4.2, 4.3, 4.0, 4.5),
+    verdict: "Simple and easy to use on a phone, but payouts are slow and there are fewer ways to pay." },
+  "crown-and-clover": { gameCount: 1100, liveCasino: false, ...scores(4.3, 3.9, 3.6, 4.0, 4.1, 4.2),
+    verdict: "A risk-free way to try a new casino with its no-deposit bonus. Winnings from it are capped at €100." },
 };
 
 const LAUNCHED = {
@@ -350,7 +370,7 @@ const claim = (...steps) => steps.map((text) => ({ text }));
 
 const BONUSES = {
   "royal-harbor": [
-    { name: "Welcome bonus", headline: "€500", amount: 500, description: "100% up to €500 + 200 free spins", types: ["Welcome", "Deposit match", "Free spins"], freeSpins: 200, wagering: "30x bonus", minDeposit: "€10", code: "HARBOR500",
+    { name: "Welcome bonus", headline: "€500", amount: 500, description: "100% up to €500 + 200 free spins", types: ["Welcome", "Deposit match", "Free spins"], freeSpins: 200, wagering: "30x bonus", minDeposit: "€10", maxBet: "€5", code: "HARBOR500",
       howToClaim: claim("Sign up at Royal Harbor with the code HARBOR500", "Deposit at least €10", "Get 100% up to €500 and 20 free spins a day for 10 days"),
       info: "The deposit match is credited straight away. Free spins arrive in daily batches of 20 on Book of Dead, each worth €0.10. Bonus money must be wagered 30 times within 30 days, with a maximum bet of €5 while wagering." },
     { name: "Weekend reload", headline: "50%", amount: 200, description: "50% up to €200 every Friday", types: ["Reload", "Deposit match"], wagering: "30x bonus", minDeposit: "€20",
@@ -374,7 +394,7 @@ const BONUSES = {
       info: "Each spin is worth €0.10. Winnings are paid as cash, with no wagering and no cap." },
   ],
   "golden-fjord": [
-    { name: "High roller welcome", headline: "€1,000", amount: 1000, description: "100% up to €1,000 for high rollers", types: ["Welcome", "Deposit match"], wagering: "35x bonus", minDeposit: "€20",
+    { name: "High roller welcome", headline: "€1,000", amount: 1000, description: "100% up to €1,000 for high rollers", types: ["Welcome", "Deposit match"], wagering: "35x bonus", minDeposit: "€20", maxBet: "€10",
       howToClaim: claim("Open an account at Golden Fjord", "Deposit at least €20 (€1,000 for the full bonus)", "The bonus is credited instantly"),
       info: "Wagering is 35 times the bonus within 60 days. Maximum bet while wagering is €10." },
     { name: "Sports welcome", headline: "€100", amount: 100, description: "100% up to €100 in free bets", types: ["Welcome", "Free bets"], wagering: "5x", minDeposit: "€10", minOdds: "1.80",
@@ -503,6 +523,50 @@ async function ensureBonusPage() {
     const entrys = [...(main.entrys ?? [])];
     entrys.splice(1, 0, { anchor: "Bonuses", url: "/welcome-bonuses" });
     await api("PATCH", `/items/menus/${main.id}`, { entrys });
+  }
+}
+
+const FAVOURITE_GAMES = ["vs20olympgate", "vs20fruitsw", "vs20sugarrush", "vs10bbbonanza", "vs20doghouse", "vs20starlight"];
+
+async function ensureGamesPage() {
+  if (!(await api("GET", "/items/pages?filter[slug][_eq]=games&fields=id")).length) {
+    await createPage({
+      slug: "games",
+      title: "Games",
+      template: "landing",
+      backlight: "primary",
+      metatitle: "Free Casino Games: Play Slot Demos, Compare RTP and Max Wins",
+      metadescription: "Play free demos of hundreds of online slots. Compare RTP, volatility and max win, then find a licensed casino that carries the game.",
+      blocks: [
+        ["gameList", { headingLevel: "h1", eyebrow: "Games", title: "Free casino games,", titleAccent: "no sign-up needed.", description: "Play the demo of any game for free, compare RTP, volatility and max win, and see which licensed casinos carry it.", sortBy: "newest", showFilters: true, initialCount: 30 }],
+        ["FAQ", { eyebrow: "FAQ", title: "Free game questions", schema: true, entries: [
+          { question: "Are the demos really free?", answer: "Yes. Demos run with play money, so you cannot win or lose real money and you do not need an account." },
+          { question: "Do demos play like the real game?", answer: "Demos use the same maths as the real-money version. Casinos can pick a lower RTP version, so check the game info screen before you play for real." },
+          { question: "What does RTP mean?", answer: "Return to player is the share of all bets a game pays back over millions of spins. A 96% RTP game pays back 96 for every 100 bet in the long run, not in a single session." },
+          { question: "What is volatility?", answer: "Volatility describes how a game pays. Low volatility games pay small wins often; high volatility games pay less often but can pay much more." },
+        ] }],
+      ],
+    });
+  }
+
+  const main = (await api("GET", "/items/menus?filter[key][_eq]=main-menu&fields=id,entrys"))[0];
+  if (main && !main.entrys?.some((e) => e.url === "/games")) {
+    const entrys = [...(main.entrys ?? [])];
+    entrys.splice(2, 0, { anchor: "Games", url: "/games" });
+    await api("PATCH", `/items/menus/${main.id}`, { entrys });
+    console.log("  Games in the main menu");
+  }
+
+  const games = await api("GET", `/items/gameTitles?filter[symbol][_in]=${FAVOURITE_GAMES.join(",")}&filter[status][_eq]=published&fields=name,slug,symbol,gameType.slug&limit=-1`);
+  const exists = (await api("GET", "/items/menus?filter[title][_eq]=Favourite%20games&fields=id")).length;
+  if (!exists && games.length) {
+    const keys = (await api("GET", "/items/menus?fields=key&limit=-1")).map((m) => Number(m.key?.match(/^footer-menu-(\d+)$/)?.[1] ?? 0));
+    const entrys = FAVOURITE_GAMES.map((s) => games.find((g) => g.symbol === s))
+      .filter((g) => g?.gameType?.slug)
+      .map((g) => ({ anchor: g.name, url: `/games/${g.gameType.slug}/${g.slug}` }));
+    entrys.push({ anchor: "All games", url: "/games" });
+    await api("POST", "/items/menus", { title: "Favourite games", key: `footer-menu-${Math.max(0, ...keys) + 1}`, entrys });
+    console.log("  Favourite games footer column");
   }
 }
 
@@ -980,9 +1044,10 @@ await grantPublicPermissions();
 await repairDisplayTemplates();
 await setupRevalidationFlow();
 if (args.has("--demo-catalog")) {
-  console.log("Adding the demo attributes, bonuses and bonus page:");
+  console.log("Adding the demo attributes, bonuses, bonus page and games page:");
   await ensureCatalog();
   await ensureBonusPage();
+  await ensureGamesPage();
 } else if (args.has("--rebuild-homepage")) await rebuildHomepage();
 else if (!args.has("--no-seed")) await seed();
 console.log("Done.");

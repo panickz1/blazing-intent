@@ -7,7 +7,8 @@
     "dev": "directus schema apply --yes ./snapshot.yaml && directus start",
     "start": "directus start",
     "snap": "directus schema snapshot --yes ./snapshot.yaml",
-    "setup": "node --env-file=.env scripts/setup.mjs"
+    "setup": "node --env-file=.env scripts/setup.mjs",
+    "import-games": "node --env-file=.env scripts/import-games.mjs"
   },
   "dependencies": {
     "directus": "^11.4.0",
@@ -18,5 +19,8 @@
   "private": true,
   "engines": {
     "node": ">=22"
+  },
+  "devDependencies": {
+    "read-excel-file": "^9.3.12"
   }
 }

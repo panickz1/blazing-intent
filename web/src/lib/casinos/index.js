@@ -43,6 +43,8 @@ const REVIEW_FIELDS = [
   "review_nodes.item.image.filename_disk", "review_nodes.item.image.width", "review_nodes.item.image.height",
 ];
 
+const REVIEW_EXTRA_FIELDS = ["verdict", ...Object.keys(site.review.scores), "bonuses.id", "bonuses.maxBet"];
+
 const INACTIVE = ["suspended", "revoked"];
 
 const ACTIVE_FILTER = {
@@ -81,6 +83,7 @@ export function toBonus(b) {
     code: b.code || null,
     freeSpins: Number(b.freeSpins) || null,
     maxWin: b.maxWin || null,
+    maxBet: b.maxBet || null,
     minOdds: b.minOdds || null,
     validUntil: b.validUntil || null,
     steps: texts(b.howToClaim, "text"),
@@ -125,10 +128,17 @@ export function toCard(c) {
   };
 }
 
+export const isFastPayout = (text) => Boolean(text && site.review.fastPayout.test(text));
+
 export function toReviewDetails(c) {
   const { sections } = site.catalog;
   const organization = published(c.organization) ? toAttribute("organizations", c.organization) : null;
   return {
+    verdict: c.verdict || c.summary || null,
+    updated: c.date_updated || null,
+    scores: Object.entries(site.review.scores)
+      .map(([field, label]) => ({ key: field, label, value: Number(c[field]) || 0 }))
+      .filter((s) => s.value > 0),
     bonuses: (Array.isArray(c.bonuses) ? c.bonuses : []).filter(published).map(toBonus),
     groups: [
       { key: "licences", label: sections.licences.label, items: relatedItems(c.licences, "licences") },
@@ -202,15 +212,17 @@ export async function getCasino(slug) {
   "use cache";
   cacheLife({ stale: 300, revalidate: 300, expire: 3600 });
   cacheTag("casinos", "blocks");
-  const rows = await apiClient().request(
-    readItems("casinos", {
-      fields: REVIEW_FIELDS,
-      deep: DEEP,
-      filter: { ...ACTIVE_FILTER, slug: { _eq: slug } },
-      limit: 1,
-    })
-  );
-  return rows?.[0] ?? null;
+  const query = (fields) => readItems("casinos", { fields, deep: DEEP, filter: { ...ACTIVE_FILTER, slug: { _eq: slug } }, limit: 1 });
+  const [rows, extras] = await Promise.all([apiClient().request(query(REVIEW_FIELDS)), optional(query(REVIEW_EXTRA_FIELDS))]);
+  const casino = rows?.[0];
+  if (!casino) return null;
+  const { bonuses: extraBonuses, ...extra } = extras?.[0] ?? {};
+  const maxBets = new Map((extraBonuses ?? []).map((b) => [b.id, b.maxBet]));
+  return {
+    ...casino,
+    ...extra,
+    bonuses: (casino.bonuses ?? []).map((b) => ({ ...b, maxBet: maxBets.get(b.id) ?? null })),
+  };
 }
 
 export async function getCasinoParams() {

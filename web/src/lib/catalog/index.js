@@ -16,6 +16,8 @@ export function getSection(path) {
 
 const pathFor = new Map(sections().map(([path, s]) => [s.collection, path]));
 
+export const sectionPath = (collection) => pathFor.get(collection) ?? null;
+
 function catalogHref(collection, slug) {
   const path = pathFor.get(collection);
   return path && slug ? `/${path}/${slug}` : null;

@@ -24,6 +24,7 @@ const origin = (value) => {
   }
 };
 const cmsOrigin = origin(cmsUrl);
+const gameDemoOrigins = "https://*.pragmaticplay.net";
 const cdnOrigin = origin(cdnUrl);
 
 const ContentSecurityPolicy = `
@@ -33,7 +34,7 @@ const ContentSecurityPolicy = `
   img-src 'self' data: blob: ${cmsOrigin} ${cdnOrigin} https://*.google-analytics.com https://*.googletagmanager.com;
   font-src 'self' https://fonts.gstatic.com data:;
   connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.vercel-insights.com https://*.vercel-scripts.com;
-  frame-src 'self' https://*.youtube.com;
+  frame-src 'self' https://*.youtube.com ${gameDemoOrigins};
   frame-ancestors 'self' ${cmsOrigin};
 `;
 
