@@ -84,24 +84,29 @@ export default function GameBrowser({ games, initialCount = site.games.initialCo
                 className="h-10 w-full rounded-md border border-grey-700 bg-grey-950 pl-9 pr-3 text-[14px] text-white placeholder:text-fg-muted focus-visible:border-primary/60 focus-visible:outline-none"
               />
             </label>
-            <label className="flex items-center gap-2 text-[13px] text-fg-muted">
-              {labels.sortLabel}
-              <select value={sortKey} onChange={(e) => setSortKey(e.target.value)} className={control}>
-                {Object.entries(labels.sortOptions).map(([key, label]) => (
-                  <option key={key} value={key}>
-                    {label}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <div className="flex items-center justify-between gap-3 md:justify-end">
+              <span className="whitespace-nowrap text-[13px] font-medium text-fg-muted" aria-live="polite">
+                {labels.resultsLabel.replace("{count}", matches.toLocaleString(site.locale))}
+              </span>
+              <label className="flex items-center gap-2 text-[13px] text-fg-muted">
+                {labels.sortLabel}
+                <select value={sortKey} onChange={(e) => setSortKey(e.target.value)} className={control}>
+                  {Object.entries(labels.sortOptions).map(([key, label]) => (
+                    <option key={key} value={key}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="no-scrollbar -mx-3 flex items-center gap-2 overflow-x-auto px-3 md:mx-0 md:flex-wrap md:overflow-visible md:px-0 [&>*]:shrink-0">
             {types.length > 1 && <Select label={labels.typeLabel} value={type} onChange={setType} all={labels.allTypes} items={types} />}
             {providers.length > 1 && (
               <Select label={labels.providerLabel} value={provider} onChange={setProvider} all={labels.allProviders} items={providers} />
             )}
             {volatilities.length > 1 && (
-              <div role="group" aria-label={labels.stats.volatility} className="flex flex-wrap items-center gap-1">
+              <div role="group" aria-label={labels.stats.volatility} className="flex items-center gap-1 md:flex-wrap">
                 {["", ...volatilities].map((v) => (
                   <button key={v || "all"} type="button" aria-pressed={volatility === v} onClick={() => setVolatility(v)} className={pill(volatility === v)}>
                     {v ? labels.volatility[v] : `${labels.stats.volatility}: ${labels.allVolatility}`}
@@ -114,9 +119,6 @@ export default function GameBrowser({ games, initialCount = site.games.initialCo
                 {labels.bonusBuyFilter}
               </button>
             )}
-            <span className="ml-auto text-[13px] text-fg-muted" aria-live="polite">
-              {labels.resultsLabel.replace("{count}", matches)}
-            </span>
           </div>
         </div>
       )}

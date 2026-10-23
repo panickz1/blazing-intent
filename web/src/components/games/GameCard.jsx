@@ -1,9 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { site } from "@/site.config";
+import { RtpBadge, VolatilityMeter } from "./GameBadges";
 
 export default function GameCard({ game }) {
-  const { stats, volatility } = site.games;
   return (
     <Link
       href={game.href}
@@ -26,14 +25,12 @@ export default function GameCard({ game }) {
       <span className="flex flex-1 flex-col gap-1.5 p-3">
         <span className="line-clamp-2 font-heading text-[14.5px] font-bold leading-snug text-white">{game.name}</span>
         {game.provider && <span className="text-[12px] text-fg-muted">{game.provider}</span>}
-        <span className="mt-auto flex flex-wrap gap-x-3 gap-y-1 pt-1 text-[12px] text-grey-200">
-          {game.rtp != null && (
-            <span>
-              <span className="text-fg-muted">{stats.rtp}</span> {game.rtp.toFixed(2)}%
-            </span>
-          )}
-          {game.volatility && <span>{volatility[game.volatility]}</span>}
-        </span>
+        {(game.rtp != null || game.volatility) && (
+          <span className="mt-auto flex items-center justify-between gap-2 pt-1.5">
+            <RtpBadge rtp={game.rtp} />
+            <VolatilityMeter volatility={game.volatility} />
+          </span>
+        )}
       </span>
     </Link>
   );

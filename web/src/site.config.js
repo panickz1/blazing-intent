@@ -130,6 +130,12 @@ export const site = {
       released: "Released",
     },
     volatility: { low: "Low", medium: "Medium", high: "High" },
+    volatilityLabel: "{level} volatility",
+    rtpTiers: [
+      { key: "high", min: 96.5, label: "High RTP" },
+      { key: "medium", min: 95, label: "Medium RTP" },
+      { key: "low", min: 0, label: "Low RTP" },
+    ],
     payTypes: { lines: "Lines", ways: "Ways", megaways: "Megaways", cluster: "Cluster pays", anywhere: "Pay anywhere" },
     features: {
       heading: "Features",
